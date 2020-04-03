@@ -1,5 +1,7 @@
 package com.techmahindra.taskallocation.models;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,16 +9,21 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.GeneratorType;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 public class User {
 
-	@Id
+	@Id	
 	@GeneratedValue
 	private long id;
 
 	@NotNull(message="Name cannot be empty")
 	private String name;
-	
+
 	@Column(unique = true)
 	@NotNull(message="gID cannot be empty")
 	private String gID;
@@ -24,27 +31,50 @@ public class User {
 	@Column(unique = true)
 	@NotBlank(message="Email cannot be empty")
 	private String email;
-	
+
+	@Column(unique = true)
+	@NotBlank(message="Admin Manager cannot be empty")
+	private String adminManager;
+
 	@NotNull(message="isActive cannot be empty")
 	private Boolean isActive;
 
 	@NotNull(message="isSuperAdmin cannot be empty")
 	private Boolean isSuperAdmin;
-	
+
 	@NotNull(message="isAdmin cannot be empty")
 	private Boolean isAdmin;
-	
+
 	@NotNull(message="isCandidate cannot be empty")
 	private Boolean isCandidate;
-
-	@NotBlank(message="User Name cannot be empty")
-	private String userName;
 
 	@NotBlank(message="Password cannot be empty")
 	private String password;
 
-	private String randomNo;
-	
+	private String randomNo; // for Sending OTP to user in email
+
+
+	@Column(name = "created_by")
+	@GeneratorType(
+			type = LoggedUser.class,
+			when = GenerationTime.INSERT
+			)
+	private String createdBy;
+
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+
+
+	@Column(name = "updated_by")
+	@GeneratorType(
+			type = LoggedUser.class,
+			when = GenerationTime.ALWAYS
+			)
+	private String updatedBy;
+
+	@UpdateTimestamp
+	private LocalDateTime updateDateTime;
+
 
 	/*
 	 * @JsonIgnore
@@ -60,7 +90,8 @@ public class User {
 
 	public User(@NotNull(message = "Name cannot be empty") String name,
 			@NotNull(message = "gID cannot be empty") String gID,
-			@NotNull(message = "Email cannot be empty") String email,
+			@NotBlank(message = "Email cannot be empty") String email,
+			@NotBlank(message = "Admin Manager cannot be empty") String adminManager,
 			@NotNull(message = "isActive cannot be empty") Boolean isActive,
 			@NotNull(message = "isSuperAdmin cannot be empty") Boolean isSuperAdmin,
 			@NotNull(message = "isAdmin cannot be empty") Boolean isAdmin,
@@ -69,6 +100,7 @@ public class User {
 		this.name = name;
 		this.gID = gID;
 		this.email = email;
+		this.adminManager = adminManager;
 		this.isActive = isActive;
 		this.isSuperAdmin = isSuperAdmin;
 		this.isAdmin = isAdmin;
@@ -80,7 +112,7 @@ public class User {
 			@NotNull(message = "Password cannot be empty") String password) {
 		super();
 		this.id = id;
-		this.userName = user_name;
+		this.gID = user_name;
 		this.password = password;
 	}
 
@@ -118,7 +150,13 @@ public class User {
 		this.email = email;
 	}
 
+	public String getAdminManager() {
+		return adminManager;
+	}
 
+	public void setAdminManager(String adminManager) {
+		this.adminManager = adminManager;
+	}
 
 	public Boolean getIsActive() {
 		return isActive;
@@ -143,14 +181,6 @@ public class User {
 	}
 	public void setIsCandidate(Boolean isCandidate) {
 		this.isCandidate = isCandidate;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getPassword() {
@@ -180,7 +210,6 @@ public class User {
 		result = prime * result + ((isCandidate == null) ? 0 : isCandidate.hashCode());
 		result = prime * result + ((isSuperAdmin == null) ? 0 : isSuperAdmin.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
 
@@ -228,11 +257,6 @@ public class User {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (userName == null) {
-			if (other.userName != null)
-				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
 		return true;
 	}
 
@@ -240,7 +264,7 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", gID=" + gID + ", email=" + email + ", isActive=" + isActive
 				+ ", isSuperAdmin=" + isSuperAdmin + ", isAdmin=" + isAdmin + ", isCandidate=" + isCandidate
-				+ ", userName=" + userName + "]";
+				+ "]";
 	}
 
 

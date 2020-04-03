@@ -55,13 +55,6 @@
                     <form:errors class="text-danger" path="email"></form:errors>
                 </div>
             </spring:bind>
-            <%-- <spring:bind path="isActive">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:checkbox path="isActive" class="form-control" placeholder="isActive"
-                                autofocus="true" label="isActive"></form:checkbox>
-                    <form:errors class="text-danger" path="isActive"></form:errors>
-                </div>
-            </spring:bind> --%>
             <spring:bind path="isSuperAdmin">
                 <div class="form-group ${status.error ? 'has-error' : ''}">
                     <form:checkbox path="isSuperAdmin" class="form-control" placeholder="isSuperAdmin"
@@ -82,16 +75,7 @@
                                 autofocus="true" label="isCandidate" ></form:checkbox>
                     <form:errors class="text-danger" path="isActive"></form:errors>
                 </div>
-            </spring:bind>
-            <spring:bind path="userName">
-                <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="userName" class="form-control" placeholder="User Name"
-                                autofocus="true" readonly="true"></form:input>
-                    <form:errors class="text-danger" path="userName"></form:errors>
-                </div>
-            </spring:bind>
-
-  
+            </spring:bind>  
             <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
         </form:form>
 
@@ -99,12 +83,4 @@
 <%@ include file="footer.jsp"%>
 
   </body>
-  <script type="text/javascript">
-
- 	$("#gID").on('keyup',function(){
- 		var text = $("#gID").val();
- 	 	$("#userName").val(text);
- 	 	});
-  
-  </script>
 </html>

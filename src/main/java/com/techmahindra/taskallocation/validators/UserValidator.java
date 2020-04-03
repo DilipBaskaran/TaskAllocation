@@ -34,12 +34,6 @@ public class UserValidator implements Validator{
         if (user.getgID().length() != 10) {
             errors.rejectValue("gID", "Size.user.username");
         }
-        if (userService.findByUserName(user.getUserName()) != null) {
-            errors.rejectValue("gID", "Duplicate.user.username");
-        }
-        if (user.getUserName().length() != 10) {
-            errors.rejectValue("gID", "Size.user.username");
-        }
 
     }
 
