@@ -1,8 +1,11 @@
 package com.techmahindra.taskallocation.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -19,7 +22,7 @@ public class TaskStatus {
 	private String statusName;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy ="status")
+	@OneToMany(mappedBy ="status",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Task> tasks;
 	
 	
@@ -50,6 +53,13 @@ public class TaskStatus {
 
 	public List<Task> getTasks() {
 		return tasks;
+	}
+	
+	public void addTask(Task task) {
+		if(this.tasks == null)
+			this.tasks = new ArrayList<Task>();
+		
+		this.tasks.add(task);
 	}
 
 	public void setTasks(List<Task> tasks) {
