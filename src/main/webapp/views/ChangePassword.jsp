@@ -30,7 +30,7 @@
 			<div class="jumbotron">
 				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 					<h1 class="display-4">
-						<spring:message code="lbl.shoppingcart.app.title" />
+						Task Management
 					</h1><br /><br />
 					<c:if test="${param.error ne null}">
 			<div style="color: red"><spring:message code="lbl.shoppingcart.login.invalidcredentials" /></div>

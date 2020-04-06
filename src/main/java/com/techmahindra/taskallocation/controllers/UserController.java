@@ -1,9 +1,9 @@
 package com.techmahindra.taskallocation.controllers;
 
 import java.util.Base64;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.techmahindra.taskallocation.config.Constants;
 import com.techmahindra.taskallocation.models.User;
+import com.techmahindra.taskallocation.responses.ErrorResponse;
+import com.techmahindra.taskallocation.responses.OperationResponse;
 import com.techmahindra.taskallocation.service.UserService;
 import com.techmahindra.taskallocation.validators.UserValidator;
 
@@ -44,32 +47,48 @@ public class UserController {
 		return "register";
 	}
 
+	@ResponseBody
 	@PostMapping("/confirmuser")
-	public String confirmuser(@RequestParam("username") String userName,
+	public OperationResponse confirmuser(@RequestParam("username") String userName,
 			@RequestParam("uniqueno") String uniqueno, 
 			Model model) {
 
 		User user = userService.findByUserName(userName);
 		//System.out.println(user);
 
-		if(user==null)
-			return "redirect:/login";
-
-		if(!uniqueno.equalsIgnoreCase(user.getRandomNo()))
-			return "confirm";
+		if(user==null || !uniqueno.equalsIgnoreCase(user.getRandomNo())) {
+			
+			OperationResponse oper = new OperationResponse();
+			
+			oper.setOperValidity("Data not correct");
+			oper.setDescription("UserName & OTP combination is wrong");
+			
+			return oper;
+		}
 
 		model.addAttribute("username", userName);
-		return "ChangePassword";
+		OperationResponse oper = new OperationResponse();
+		
+		oper.setOperValidity("Success");
+		oper.setDescription("User Confirmation done");
+		
+		return oper;
 
 	}
 
+	@ResponseBody
 	@PostMapping("/registration")
-	public String registration(@ModelAttribute("user") User user, 
+	public OperationResponse registration(@ModelAttribute("user") User user, 
 			BindingResult bindingResult) {
 		userValidator.validate(user, bindingResult);
 
 		if (bindingResult.hasErrors()) {
-			return "register";
+			OperationResponse oper = new OperationResponse();
+			
+			oper.setOperValidity("Data not correct");
+			oper.setDescription("User information given are wrong");
+			
+			return oper;
 		}
 
 		long random = Math.round(Math.random()*10000);
@@ -86,20 +105,32 @@ public class UserController {
 				"Complete Registration!", 
 				"Enter this to change password: "+random+"--->"+user.getEmail());
 
-		return "redirect:/home";
+		OperationResponse oper = new OperationResponse();
+		
+		oper.setOperValidity("Success");
+		oper.setDescription("User Registration done");
+		
+		return oper;
 	}
 
+	@ResponseBody
 	@PostMapping("/setpassword")
-	public String setPassword(@RequestParam("username") String userName,
+	public OperationResponse setPassword(@RequestParam("username") String userName,
 			@RequestParam("password") String password) {
+		
+		OperationResponse oper = new OperationResponse();
+		
+		oper.setOperValidity("Data not correct");
+		oper.setDescription("UserName Password combination is not accepted");
+		
 
 		if(password == null || userName==null)
-			return "redirect:/login";
+			return oper;
 
 		User user = userService.findByUserName(userName);
 
 		if (user==null) {
-			return "redirect:/login";
+			return oper;
 		}
 		
 		System.out.println(password);
@@ -110,7 +141,10 @@ public class UserController {
 		user.setIsActive(true);
 		userService.saveUser(user);
 
-		return "redirect:/home";
+		oper.setOperValidity("Success");
+		oper.setDescription("Password is set properly");
+		
+		return oper;
 	}
 
 	@GetMapping("/forgotPassword")
@@ -118,15 +152,21 @@ public class UserController {
 		return "forgotPassword";
 	}
 
+	@ResponseBody
 	@PostMapping("/forgotPassword")
-	public String forgotPassword(@ModelAttribute("username")String username,
+	public OperationResponse forgotPassword(@ModelAttribute("username")String username,
 			BindingResult error,
 			Model model) {
 
+		OperationResponse oper = new OperationResponse();
+		
+		oper.setOperValidity("Data not correct");
+		oper.setDescription("User information given are wrong");
+		
 		User user = userService.findByUserName(username);
 
 		if(user == null)
-			return "forgotPassword";
+			return oper;
 
 		model.addAttribute("username", username);
 		
@@ -141,18 +181,20 @@ public class UserController {
 				"Complete Registration!", 
 				"Enter this to change password: "+random+"--->"+user.getEmail());
 		
+		oper.setOperValidity("Success");
+		oper.setDescription("Unique Number sent to user");
 
-
-		return "confirm";
+		return oper;
 	}
 	
+	
 	@PostMapping("/updateProfile")
-	public String updateProfile(@ModelAttribute("user") User user, 
+	public ResponseEntity<?> updateProfile(@ModelAttribute("user") User user, 
 			BindingResult bindingResult) {
 		userValidator.validate(user, bindingResult);
 
 		if (bindingResult.hasErrors()) {
-			return "register";
+			return (ResponseEntity<?>) Constants.operationFailure;
 		}
 
 		User userToUpdate = userService.findById(user.getId());
@@ -176,17 +218,20 @@ public class UserController {
 		
 		
 		userService.saveUser(userToUpdate);
-		
-		/*
-		 * userService.sendMail("kumardilip1990b@gmail.com", "Complete Registration!",
-		 * "Enter this to change password: "+random+"--->"+user.getEmail());
-		 */
-		return "redirect:/home";
+		return (ResponseEntity<?>) Constants.operationSuccess;
 	}
 
 	@ResponseBody
 	@RequestMapping("/getUsers")
-	public List<User> getUserByAdminManager(@RequestParam("securityKey")){
+	public ResponseEntity<?> getUserByAdminManager(@RequestParam("securityKey")String securityKey){
+		
+		User user = userService.findUserBySecurityKey(securityKey);
+		
+		if(user==null)
+			return (ResponseEntity<?>) Constants.loginError;
+		
+		return (ResponseEntity<?>) userService.findUsersByAdmin(user.getEmail());
+		
 		
 	}
 	

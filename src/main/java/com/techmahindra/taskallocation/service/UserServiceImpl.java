@@ -65,5 +65,10 @@ public class UserServiceImpl implements UserService{
 
 		return userRepository.findUserBysecurityKey(securityKey);
 	}
+	@Override
+	public List<User> findUsersByAdmin(String adminManager) {
+		// TODO Auto-generated method stub
+		return userRepository.findUsersByadminManager(adminManager);
+	}
 
 }

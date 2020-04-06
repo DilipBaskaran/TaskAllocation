@@ -1,5 +1,7 @@
 package com.techmahindra.taskallocation.service;
 
+import java.util.List;
+
 import com.techmahindra.taskallocation.models.User;
 
 public interface UserService {
@@ -15,5 +17,7 @@ public interface UserService {
 	public void sendMail(String email, String subject, String message);
 	
 	public User findUserBySecurityKey(String securityKey);
+	
+	public List<User> findUsersByAdmin(String adminManager);
 
 }
