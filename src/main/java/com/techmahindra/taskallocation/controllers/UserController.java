@@ -23,7 +23,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-
 	@Autowired
 	private UserValidator userValidator;
 
@@ -78,11 +77,11 @@ public class UserController {
 		}
 
 		long random = Math.round(Math.random()*10000);
-
+		
 		user.setPassword("abc123");
 		user.setRandomNo(""+random);
 		user.setIsActive(false);
-		//System.out.println(user+"\nRandom Number: "+random);
+		System.out.println(user+"\nRandom Number: "+random);
 
 
 		userService.saveUser(user);

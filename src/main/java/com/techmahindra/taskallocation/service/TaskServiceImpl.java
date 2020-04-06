@@ -13,7 +13,7 @@ import com.techmahindra.taskallocation.models.Task;
 import com.techmahindra.taskallocation.models.TaskStatus;
 import com.techmahindra.taskallocation.models.User;
 
-@Service
+//@Service
 public class TaskServiceImpl implements TaskService {
 
 	

@@ -14,6 +14,8 @@ import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class User {
 
@@ -31,9 +33,8 @@ public class User {
 	@Column(unique = true)
 	@NotBlank(message="Email cannot be empty")
 	private String email;
-
-	@Column(unique = true)
-	@NotBlank(message="Admin Manager cannot be empty")
+		
+	//@NotBlank(message="Admin Manager cannot be empty")
 	private String adminManager;
 
 	@NotNull(message="isActive cannot be empty")
@@ -48,9 +49,11 @@ public class User {
 	@NotNull(message="isCandidate cannot be empty")
 	private Boolean isCandidate;
 
+	@JsonIgnore
 	@NotBlank(message="Password cannot be empty")
 	private String password;
 
+	@JsonIgnore
 	private String randomNo; // for Sending OTP to user in email
 
 
@@ -262,10 +265,13 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", gID=" + gID + ", email=" + email + ", isActive=" + isActive
-				+ ", isSuperAdmin=" + isSuperAdmin + ", isAdmin=" + isAdmin + ", isCandidate=" + isCandidate
-				+ "]";
+		return "User [id=" + id + ", name=" + name + ", gID=" + gID + ", email=" + email + ", adminManager="
+				+ adminManager + ", isActive=" + isActive + ", isSuperAdmin=" + isSuperAdmin + ", isAdmin=" + isAdmin
+				+ ", isCandidate=" + isCandidate + ", createdBy=" + createdBy + ", createDateTime=" + createDateTime
+				+ ", updatedBy=" + updatedBy + ", updateDateTime=" + updateDateTime + "]";
 	}
+
+	
 
 
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.techmahindra.taskallocation.dao.TaskStatusRepository;
 import com.techmahindra.taskallocation.models.TaskStatus;
 
-@Service
+//@Service
 public class TaskStatusServiceImpl implements TaskStatusService {
 
 	@Autowired

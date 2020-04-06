@@ -17,7 +17,7 @@ import com.techmahindra.taskallocation.service.TaskService;
 import com.techmahindra.taskallocation.service.TaskStatusService;
 import com.techmahindra.taskallocation.service.UserService;
 
-@RestController
+//@RestController
 @RequestMapping("/api")
 public class TaskController {
 

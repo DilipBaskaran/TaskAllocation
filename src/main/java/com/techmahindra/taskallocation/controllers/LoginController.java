@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.techmahindra.taskallocation.models.User;
 import com.techmahindra.taskallocation.service.UserService;
@@ -26,6 +27,27 @@ public class LoginController {
 		return currentUserName;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = {"/user/json"})
+	public User userJSON(Model model){		
+		String userName=getCurrentUserName();
+		//System.out.println(userName);
+		User user = null;
+		if(userName == null)
+			return user;
+		if(userName != null) {
+			user = userService.findByUserName(userName);
+			//System.out.println(user.getIsActive());
+			if(user.getIsActive()==false) {
+				model.addAttribute("username", userName);
+				return user;
+			}
+		}
+		
+		model.addAttribute("userName",userName);
+		return user;
+	}
+	
 	@RequestMapping(value = {"/","/index","/home"})
 	public String index(Model model){		
 		String userName=getCurrentUserName();
@@ -44,6 +66,8 @@ public class LoginController {
 		model.addAttribute("userName",userName);
 		return "home";
 	}
+	
+	
 
 	@RequestMapping("/login")
 	public String login(Model model){
