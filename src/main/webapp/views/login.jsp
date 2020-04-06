@@ -35,7 +35,7 @@
 					<c:if test="${param.error ne null}">
 			<div style="color: red"><spring:message code="lbl.shoppingcart.login.invalidcredentials" /></div>
 		</c:if>
-		<form action="/j_spring_security_check" method="post">
+		<form action="/login" method="post">
 			<div class="form-group">
 				<label for="username"><spring:message code="lbl.shoppingcart.login.username" /></label> <input type="text"
 					class="form-control" id="username" name="username">
@@ -47,7 +47,7 @@
 
 			<button type="submit" class="btn btn-success"><spring:message code="lbl.shoppingcart.login.submit" /></button>
 			
-			<a href="/user/forgotpassword" class="float-right"><spring:message code="lbl.shoppingcart.login.forgotPassword" /></a>
+			<a href="/user/forgotPassword" class="float-right"><spring:message code="lbl.shoppingcart.login.forgotPassword" /></a>
 
 			<input type="hidden" name="${_csrf.parameterName}"
 				value="${_csrf.token}" />

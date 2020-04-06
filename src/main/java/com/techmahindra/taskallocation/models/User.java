@@ -56,29 +56,20 @@ public class User {
 	@JsonIgnore
 	private String randomNo; // for Sending OTP to user in email
 
-
-	@Column(name = "created_by")
-	@GeneratorType(
-			type = LoggedUser.class,
-			when = GenerationTime.INSERT
-			)
 	private String createdBy;
 
 	@CreationTimestamp
 	private LocalDateTime createDateTime;
 
-
-	@Column(name = "updated_by")
-	@GeneratorType(
-			type = LoggedUser.class,
-			when = GenerationTime.ALWAYS
-			)
 	private String updatedBy;
 
 	@UpdateTimestamp
 	private LocalDateTime updateDateTime;
 
-
+	@JsonIgnore
+	private String securityKey;
+	
+	
 	/*
 	 * @JsonIgnore
 	 * 
@@ -151,6 +142,14 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getSecurityKey() {
+		return securityKey;
+	}
+
+	public void setSecurityKey(String securityKey) {
+		this.securityKey = securityKey;
 	}
 
 	public String getAdminManager() {
@@ -269,6 +268,38 @@ public class User {
 				+ adminManager + ", isActive=" + isActive + ", isSuperAdmin=" + isSuperAdmin + ", isAdmin=" + isAdmin
 				+ ", isCandidate=" + isCandidate + ", createdBy=" + createdBy + ", createDateTime=" + createDateTime
 				+ ", updatedBy=" + updatedBy + ", updateDateTime=" + updateDateTime + "]";
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
+	}
+
+	public String getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(String updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public LocalDateTime getUpdateDateTime() {
+		return updateDateTime;
+	}
+
+	public void setUpdateDateTime(LocalDateTime updateDateTime) {
+		this.updateDateTime = updateDateTime;
 	}
 
 	
