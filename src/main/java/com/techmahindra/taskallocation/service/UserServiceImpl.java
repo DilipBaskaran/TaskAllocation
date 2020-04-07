@@ -75,5 +75,15 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return userRepository.findUserByemail(email);
 	}
+	@Override
+	public long findCountOfUsers() {
+		// TODO Auto-generated method stub
+		return userRepository.count();
+	}
+	@Override
+	public List<User> findSuperAdmins() {
+		// TODO Auto-generated method stub
+		return userRepository.findUsersByisSuperAdmin(true);
+	}
 
 }

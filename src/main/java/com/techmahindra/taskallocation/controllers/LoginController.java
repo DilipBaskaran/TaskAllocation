@@ -1,7 +1,6 @@
 package com.techmahindra.taskallocation.controllers;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +86,7 @@ public class LoginController {
 						
 			String securityKey = Base64.getEncoder() 
 					.encodeToString(
-							(userName+":"+password+":"+Date.valueOf(LocalDate.now()).toString()).getBytes());
+							(userName+":"+password+":"+LocalDateTime.now().toString()).getBytes());
 			oper.setDescription(securityKey);
 			user.setSecurityKey(securityKey);
 			userService.saveUser(user);

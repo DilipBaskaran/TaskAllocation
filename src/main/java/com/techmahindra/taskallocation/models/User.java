@@ -59,12 +59,12 @@ public class User {
 	private String createdBy;
 
 	@CreationTimestamp
-	private LocalDateTime createDateTime;
+	private LocalDateTime createdDateTime;
 
 	private String updatedBy;
 
 	@UpdateTimestamp
-	private LocalDateTime updateDateTime;
+	private LocalDateTime updatedDateTime;
 
 	@JsonIgnore
 	private String securityKey;
@@ -266,8 +266,8 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", gID=" + gID + ", email=" + email + ", adminManager="
 				+ adminManager + ", isActive=" + isActive + ", isSuperAdmin=" + isSuperAdmin + ", isAdmin=" + isAdmin
-				+ ", isCandidate=" + isCandidate + ", createdBy=" + createdBy + ", createDateTime=" + createDateTime
-				+ ", updatedBy=" + updatedBy + ", updateDateTime=" + updateDateTime + "]";
+				+ ", isCandidate=" + isCandidate + ", createdBy=" + createdBy + ", createdDateTime=" + createdDateTime
+				+ ", updatedBy=" + updatedBy + ", updatedDateTime=" + updatedDateTime + "]";
 	}
 
 	public String getCreatedBy() {
@@ -278,12 +278,12 @@ public class User {
 		this.createdBy = createdBy;
 	}
 
-	public LocalDateTime getCreateDateTime() {
-		return createDateTime;
+	public LocalDateTime getCreatedDateTime() {
+		return createdDateTime;
 	}
 
-	public void setCreateDateTime(LocalDateTime createDateTime) {
-		this.createDateTime = createDateTime;
+	public void setCreatedDateTime(LocalDateTime createdDateTime) {
+		this.createdDateTime = createdDateTime;
 	}
 
 	public String getUpdatedBy() {
@@ -294,12 +294,12 @@ public class User {
 		this.updatedBy = updatedBy;
 	}
 
-	public LocalDateTime getUpdateDateTime() {
-		return updateDateTime;
+	public LocalDateTime getUpdatedDateTime() {
+		return updatedDateTime;
 	}
 
-	public void setUpdateDateTime(LocalDateTime updateDateTime) {
-		this.updateDateTime = updateDateTime;
+	public void setUpdatedDateTime(LocalDateTime updatedDateTime) {
+		this.updatedDateTime = updatedDateTime;
 	}
 
 	

@@ -21,5 +21,9 @@ public interface UserService {
 	public User findUserBySecurityKey(String securityKey);
 	
 	public List<User> findUsersByAdmin(String adminManager);
+	
+	public long findCountOfUsers();
+	
+	public List<User> findSuperAdmins();
 
 }

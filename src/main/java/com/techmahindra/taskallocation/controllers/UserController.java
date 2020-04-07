@@ -1,22 +1,20 @@
 package com.techmahindra.taskallocation.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.techmahindra.taskallocation.config.Constants;
 import com.techmahindra.taskallocation.models.User;
 import com.techmahindra.taskallocation.responses.OperationResponse;
 import com.techmahindra.taskallocation.service.UserService;
@@ -46,18 +44,24 @@ public class UserController {
 	public OperationResponse registration(@RequestBody User user,
 			@RequestParam String securityKey,
 			BindingResult bindingResult) {
-		
-		System.out.println(user);
-		
-		userValidator.validate(user, bindingResult);
-		
-		User registeringUser = userService.findUserBySecurityKey(securityKey);
 
-		if (bindingResult.hasErrors() || registeringUser==null) {
+		System.out.println(user);
+
+		userValidator.validate(user, bindingResult,true);
+		User registeringUser =null;
+		if(securityKey==null || securityKey=="") {
+			if(userService.findSuperAdmins().size() ==0) {
+				registeringUser = new User();
+				registeringUser.setgID("FirstUser");
+			}
+		}else {
+			registeringUser = userService.findUserBySecurityKey(securityKey);
+		}
+
+		if (bindingResult.hasErrors() || registeringUser==null || !registeringUser.getIsSuperAdmin()) {
 			OperationResponse oper = new OperationResponse();
 			oper.setOperValidity("Failure");
 			oper.setDescription("User information given are wrong\n"+bindingResult.toString());
-
 			return oper;
 		}
 
@@ -65,21 +69,12 @@ public class UserController {
 
 		user.setPassword(EncodingUtil.encode("abc123"));
 		user.setRandomNo(""+random);
-		//user.setIsActive(true);
 		user.setCreatedBy(registeringUser.getgID());
 		user.setUpdatedBy(registeringUser.getgID());
 		System.out.println(user+"\nRandom Number: "+random);
 
-		//try {
-			userService.saveUser(user);
-		/*
-		 * }catch(Exception e) { OperationResponse oper = new OperationResponse();
-		 * 
-		 * oper.setOperValidity("Failure");
-		 * oper.setDescription("User information given are wrong");
-		 * 
-		 * return oper; }
-		 */
+		userService.saveUser(user);
+		
 		userService.sendMail("kumardilip1990b@gmail.com",
 				"Complete Registration!", 
 				"Enter this to change password: "+random+"--->"+user.getEmail());
@@ -99,9 +94,7 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/forgotPassword")
-	public OperationResponse forgotPassword(@RequestParam("username")String username,
-			BindingResult error,
-			Model model) {
+	public OperationResponse forgotPassword(@RequestParam("username")String username) {
 
 		OperationResponse oper = new OperationResponse();
 
@@ -113,7 +106,6 @@ public class UserController {
 		if(user == null)
 			return oper;
 
-		model.addAttribute("username", username);
 
 		long random = Math.round(Math.random()*10000);
 		user.setRandomNo(""+random);
@@ -191,24 +183,24 @@ public class UserController {
 		return oper;
 	}
 
-	
+
 	@ResponseBody
 	@GetMapping("/info")
 	public Object getUserInfo(@RequestParam("securityKey") String securityKey) {
-		
+
 		User user = userService.findUserBySecurityKey(securityKey);
-		
+
 		if(user==null) {
 			OperationResponse oper = new OperationResponse();
 			oper.setOperValidity("Data not correct");
 			oper.setDescription("Not a valid User!!");
 			return oper;
 		}
-		
+
 		System.out.println(user);
-		
+
 		return user;
-			
+
 	}
 
 
@@ -217,35 +209,65 @@ public class UserController {
 	public OperationResponse updateProfile(@RequestBody User user,
 			@RequestParam String securityKey,
 			BindingResult bindingResult) {
-		userValidator.validate(user, bindingResult);
-		OperationResponse oper = new OperationResponse();
 
-		User userToUpdate = userService.findById(user.getId());
-		if (bindingResult.hasErrors() || userToUpdate == null) {
+		OperationResponse oper = new OperationResponse();
+		oper.setOperValidity("Failure! Data not correct!");
+
+		User updatingUser = userService.findUserBySecurityKey(securityKey);
+
+		if(updatingUser == null || 
+				( updatingUser.getId() != user.getId() && 
+				!( updatingUser.getIsAdmin() || updatingUser.getIsSuperAdmin() ) ) ) {
+			oper.setDescription("UpatingUser is not valid!! Please resubmit!!");
+			return oper;
+		}
+		
+		userValidator.validate(user, bindingResult,false);
+
+		if (bindingResult.hasErrors() ) {
 			oper.setOperValidity("Failure! Data not correct!");
-			oper.setDescription("Data is not valid!! Please resubmit!!"+bindingResult.toString());
+			oper.setDescription("Data is not valid!! Please resubmit!!"+bindingResult.toString()); 
 			return oper;
 		}
 
-		if(user.getAdminManager()!=null)
+
+		User userToUpdate = userService.findById(user.getId());
+		if(userToUpdate == null) {
+			oper.setDescription("Id is not valid!! Please resubmit!!");
+			return oper;
+		}
+
+		if(user.getAdminManager()!=null) 
 			userToUpdate.setAdminManager(user.getAdminManager());
+		
 		if(user.getIsActive()!=null)
 			userToUpdate.setIsActive(user.getIsActive());
+		
 		if(user.getIsAdmin()!=null)
 			userToUpdate.setIsAdmin(user.getIsAdmin());
+		
 		if(user.getIsCandidate()!=null)
 			userToUpdate.setIsCandidate(user.getIsCandidate());
+		
 		if(user.getIsSuperAdmin()!=null)
 			userToUpdate.setIsSuperAdmin(user.getIsSuperAdmin());
+		
 		if(user.getEmail()!=null)
 			userToUpdate.setEmail(user.getEmail());
+		
 		if(user.getgID()!=null)
 			userToUpdate.setgID(user.getgID());
+		
 		if(user.getName()!=null)
 			userToUpdate.setName(user.getName());
 
+		userToUpdate.setUpdatedBy(updatingUser.getgID());
 
 		userService.saveUser(userToUpdate);
+
+		oper.setOperValidity("Success");
+		oper.setDescription("User Update Done");
+
 		return oper;
 	}
 
@@ -261,12 +283,22 @@ public class UserController {
 			oper.setDescription("User is not valid!!");
 			return oper;
 		}
-		
+
 		List<User> users = userService.findUsersByAdmin(user.getEmail());
 
-		System.out.println(users);
-		
-		return userService.findUsersByAdmin(user.getEmail());
+		List<User> copyUsers  = new ArrayList(users);
+
+		for(User userRec : users) {
+			if(userRec.getIsAdmin()==true || userRec.getIsSuperAdmin()==true) {
+				List<User> subordinates = userService.findUsersByAdmin(userRec.getEmail()); 
+				if(subordinates != null)
+					copyUsers.addAll(subordinates);
+			}
+		}
+
+		System.out.println(copyUsers);
+
+		return copyUsers;
 
 
 	}
