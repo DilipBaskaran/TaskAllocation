@@ -27,13 +27,20 @@ public class UserValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "gID", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isActive", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isSuperAdmin", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isAdmin", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isCandidate", "NotEmpty");
         
-        if (user.getgID().length() != 10) {
+        if (user.getgID().length() != 10)
             errors.rejectValue("gID", "Size.user.username");
-        }
+        
+  
+        if(userService.findByUserName(user.getgID())!=null)
+        	errors.rejectValue("gID", "UserName is already present");
+        
+        if(userService.findByEmail(user.getEmail())!=null)
+        	errors.rejectValue("gID", "User Email is already present");
 
     }
 

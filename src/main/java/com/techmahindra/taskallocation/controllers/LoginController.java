@@ -3,11 +3,8 @@ package com.techmahindra.taskallocation.controllers;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.techmahindra.taskallocation.config.Constants;
 import com.techmahindra.taskallocation.models.User;
-import com.techmahindra.taskallocation.responses.Login;
 import com.techmahindra.taskallocation.responses.OperationResponse;
 import com.techmahindra.taskallocation.service.UserService;
 
@@ -86,9 +81,10 @@ public class LoginController {
 		if (user != null  
 				&& user.getPassword().equals(
 						Base64.getEncoder().encodeToString(password.getBytes())) ) {
-
+			
 			oper.setOperValidity("Success");
 			
+						
 			String securityKey = Base64.getEncoder() 
 					.encodeToString(
 							(userName+":"+password+":"+Date.valueOf(LocalDate.now()).toString()).getBytes());

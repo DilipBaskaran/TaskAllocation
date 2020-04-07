@@ -14,6 +14,8 @@ public interface UserService {
 
 	public User findByUserName(String userName);
 	
+	public User findByEmail(String email);
+	
 	public void sendMail(String email, String subject, String message);
 	
 	public User findUserBySecurityKey(String securityKey);
