@@ -4,6 +4,7 @@ public class OperationResponse {
 	
 	private String operValidity;
 	private String description;
+	private Object result;
 	
 	public OperationResponse() {
 		
@@ -13,6 +14,15 @@ public class OperationResponse {
 		super();
 		this.operValidity = operValidity;
 		this.description = description;
+	}
+	
+	
+
+	public OperationResponse(String operValidity, String description, Object result) {
+		super();
+		this.operValidity = operValidity;
+		this.description = description;
+		this.result = result;
 	}
 
 	public String getOperValidity() {
@@ -30,10 +40,13 @@ public class OperationResponse {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
-	
-	
-	
+
+	public Object getResult() {
+		return result;
+	}
+
+	public void setResult(Object result) {
+		this.result = result;
+	}
 
 }

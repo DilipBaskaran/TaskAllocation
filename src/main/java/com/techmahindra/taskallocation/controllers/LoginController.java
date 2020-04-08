@@ -6,8 +6,8 @@ import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,29 +20,6 @@ public class LoginController {
 
 	@Autowired
 	UserService userService;
-
-
-
-	@ResponseBody
-	@RequestMapping(value = {"/user/json"})
-	public User userJSON(Model model){		
-		String userName="";//getCurrentUserName();
-		//System.out.println(userName);
-		User user = null;
-		if(userName == null)
-			return user;
-		if(userName != null) {
-			user = userService.findByUserName(userName);
-			//System.out.println(user.getIsActive());
-			if(user.getIsActive()==false) {
-				model.addAttribute("username", userName);
-				return user;
-			}
-		}
-
-		model.addAttribute("userName",userName);
-		return user;
-	}
 
 	/*
 	 * @RequestMapping(value = {"/","/index","/home"}) public String index(Model
@@ -60,14 +37,14 @@ public class LoginController {
 
 
 
-	@RequestMapping("/login")
-	public String login(Model model){
-		return "login";
-	}
+	/*
+	 * @RequestMapping("/login") public String login(Model model){ return "login"; }
+	 */
 
 	@ResponseBody
 	@PostMapping("/login")
-	public OperationResponse loginReq(@RequestParam("username") String userName,@RequestParam("password") String password){
+	public OperationResponse loginReq(@RequestParam("username") String userName,
+			@RequestParam("password") String password){
 
 
 		User user = userService.findByUserName(userName);
@@ -81,17 +58,18 @@ public class LoginController {
 				&& user.getPassword().equals(
 						Base64.getEncoder().encodeToString(password.getBytes())) ) {
 			
-			oper.setOperValidity("Success");
+			oper.setOperValidity("success");
 			
 						
 			String securityKey = Base64.getEncoder() 
 					.encodeToString(
 							(userName+":"+password+":"+LocalDateTime.now().toString()).getBytes());
-			oper.setDescription(securityKey);
+			oper.setDescription("Login is successful!!");
+			oper.setResult(securityKey);
 			user.setSecurityKey(securityKey);
 			userService.saveUser(user);
 		}else {
-			oper.setOperValidity("Failure");
+			oper.setOperValidity("failure");
 			oper.setDescription("UserName Password combination is not accepted");
 		}
 		

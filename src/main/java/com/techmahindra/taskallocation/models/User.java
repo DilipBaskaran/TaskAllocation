@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -32,6 +33,8 @@ public class User {
 
 	@Column(unique = true)
 	@NotBlank(message="Email cannot be empty")
+	@Email(message = "Email structure should be proper",
+	regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
 	private String email;
 		
 	//@NotBlank(message="Admin Manager cannot be empty")
@@ -50,7 +53,7 @@ public class User {
 	private Boolean isCandidate;
 
 	@JsonIgnore
-	@NotBlank(message="Password cannot be empty")
+	//@NotBlank(message="Password cannot be empty")
 	private String password;
 
 	@JsonIgnore

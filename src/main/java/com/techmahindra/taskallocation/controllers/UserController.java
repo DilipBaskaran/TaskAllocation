@@ -3,6 +3,8 @@ package com.techmahindra.taskallocation.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,18 +34,18 @@ public class UserController {
 	@Autowired
 	private UserValidator userValidator;
 
-	@GetMapping("/registration")
-	public String registration(Model model) {
-		model.addAttribute("user", new User());
-
-		return "register";
-	}
+	/*
+	 * @GetMapping("/registration") public String registration(Model model) {
+	 * model.addAttribute("user", new User());
+	 * 
+	 * return "register"; }
+	 */
 
 
 	@ResponseBody
 	@PostMapping("/registration")
-	public OperationResponse registration(@RequestBody User user,
-			@RequestParam String securityKey,
+	public OperationResponse registration(@Valid @RequestBody User user,
+			@RequestHeader(value="securityKey") String securityKey,
 			BindingResult bindingResult) {
 
 		System.out.println(user);
@@ -60,46 +63,40 @@ public class UserController {
 
 		if (bindingResult.hasErrors() || registeringUser==null || !registeringUser.getIsSuperAdmin()) {
 			OperationResponse oper = new OperationResponse();
-			oper.setOperValidity("Failure");
-			oper.setDescription("User information given are wrong\n"+bindingResult.toString());
+			oper.setOperValidity("failure");
+			oper.setDescription("User information given are wrong");
+			oper.setResult(bindingResult.toString());
 			return oper;
 		}
 
-		long random = Math.round(Math.random()*10000);
-
 		user.setPassword(EncodingUtil.encode("abc123"));
-		user.setRandomNo(""+random);
 		user.setCreatedBy(registeringUser.getgID());
 		user.setUpdatedBy(registeringUser.getgID());
-		System.out.println(user+"\nRandom Number: "+random);
 
 		userService.saveUser(user);
-		
-		userService.sendMail("kumardilip1990b@gmail.com",
-				"Complete Registration!", 
-				"Enter this to change password: "+random+"--->"+user.getEmail());
 
 		OperationResponse oper = new OperationResponse();
 
-		oper.setOperValidity("Success");
+		oper.setOperValidity("success");
 		oper.setDescription("User Registration done");
+		oper.setResult(user);
 
 		return oper;
 	}
 
-	@GetMapping("/forgotPassword")
-	public String forgotPassword() {
-		return "forgotPassword";
-	}
+	/*
+	 * @GetMapping("/forgotPassword") public String forgotPassword() { return
+	 * "forgotPassword"; }
+	 */
 
 	@ResponseBody
 	@PostMapping("/forgotPassword")
-	public OperationResponse forgotPassword(@RequestParam("username")String username) {
+	public OperationResponse forgotPassword(@RequestParam("username") String username) {
 
 		OperationResponse oper = new OperationResponse();
 
-		oper.setOperValidity("Data not correct");
-		oper.setDescription("User information given are wrong");
+		oper.setOperValidity("failure");
+		oper.setDescription("Data not correct! User information given are wrong!");
 
 		User user = userService.findByUserName(username);
 
@@ -109,16 +106,17 @@ public class UserController {
 
 		long random = Math.round(Math.random()*10000);
 		user.setRandomNo(""+random);
+		
 		System.out.println(user+"\nRandom Number: "+random);
 
 		userService.saveUser(user);
 
 
-		userService.sendMail("kumardilip1990b@gmail.com", "Complete Registration!",
+		userService.sendMail(user.getEmail(), "Complete Registration!",
 				"Enter this to change password: "+random+"--->"+user.getEmail());
 
 
-		oper.setOperValidity("Success");
+		oper.setOperValidity("success");
 		oper.setDescription("Unique Number sent to user");
 
 		return oper;
@@ -136,15 +134,15 @@ public class UserController {
 
 			OperationResponse oper = new OperationResponse();
 
-			oper.setOperValidity("Data not correct");
-			oper.setDescription("UserName & OTP combination is wrong");
+			oper.setOperValidity("failure");
+			oper.setDescription("Data not correct! UserName & Unique Number combination is wrong!");
 
 			return oper;
 		}
 
 		OperationResponse oper = new OperationResponse();
 
-		oper.setOperValidity("Success");
+		oper.setOperValidity("success");
 		oper.setDescription("User Confirmation done");
 
 		return oper;
@@ -153,13 +151,13 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/setPassword")
-	public OperationResponse setPassword(@RequestParam("username") String userName,
+	public OperationResponse setPassword(@RequestHeader(value="securityKey") String userName,
 			@RequestParam("password") String password) {
 
 		OperationResponse oper = new OperationResponse();
 
-		oper.setOperValidity("Data not correct");
-		oper.setDescription("UserName Password combination is not accepted");
+		oper.setOperValidity("failure");
+		oper.setDescription("Data not correct! UserName Password combination is not accepted");
 
 
 		if(password == null || userName==null)
@@ -177,7 +175,7 @@ public class UserController {
 		//user.setIsActive(true);
 		userService.saveUser(user);
 
-		oper.setOperValidity("Success");
+		oper.setOperValidity("success");
 		oper.setDescription("Password is set properly");
 
 		return oper;
@@ -186,20 +184,25 @@ public class UserController {
 
 	@ResponseBody
 	@GetMapping("/info")
-	public Object getUserInfo(@RequestParam("securityKey") String securityKey) {
+	public Object getUserInfo(@RequestHeader(value="securityKey") String securityKey) {
 
 		User user = userService.findUserBySecurityKey(securityKey);
-
+		OperationResponse oper = new OperationResponse();
 		if(user==null) {
-			OperationResponse oper = new OperationResponse();
-			oper.setOperValidity("Data not correct");
-			oper.setDescription("Not a valid User!!");
+			
+			oper.setOperValidity("failure");
+			oper.setDescription("Data not correct! Not a valid User!!");
 			return oper;
 		}
 
 		System.out.println(user);
-
-		return user;
+		
+		
+		oper.setOperValidity("success");
+		oper.setDescription("API hit with proper details");
+		oper.setResult(user);
+		
+		return oper;
 
 	}
 
@@ -207,11 +210,11 @@ public class UserController {
 	@ResponseBody
 	@PostMapping("/updateProfile")
 	public OperationResponse updateProfile(@RequestBody User user,
-			@RequestParam String securityKey,
+			@RequestHeader(value="securityKey") String securityKey,
 			BindingResult bindingResult) {
 
 		OperationResponse oper = new OperationResponse();
-		oper.setOperValidity("Failure! Data not correct!");
+		oper.setOperValidity("failure");
 
 		User updatingUser = userService.findUserBySecurityKey(securityKey);
 
@@ -219,14 +222,16 @@ public class UserController {
 				( updatingUser.getId() != user.getId() && 
 				!( updatingUser.getIsAdmin() || updatingUser.getIsSuperAdmin() ) ) ) {
 			oper.setDescription("UpatingUser is not valid!! Please resubmit!!");
+			oper.setResult("User can update his profile/ his subordinates");
 			return oper;
 		}
 		
 		userValidator.validate(user, bindingResult,false);
 
 		if (bindingResult.hasErrors() ) {
-			oper.setOperValidity("Failure! Data not correct!");
-			oper.setDescription("Data is not valid!! Please resubmit!!"+bindingResult.toString()); 
+			oper.setOperValidity("failure");
+			oper.setDescription("Data is not valid!! Please resubmit!!");
+			oper.setResult(bindingResult.toString());
 			return oper;
 		}
 
@@ -234,6 +239,7 @@ public class UserController {
 		User userToUpdate = userService.findById(user.getId());
 		if(userToUpdate == null) {
 			oper.setDescription("Id is not valid!! Please resubmit!!");
+			oper.setResult("User to be updated is wrong");
 			return oper;
 		}
 
@@ -265,22 +271,23 @@ public class UserController {
 
 		userService.saveUser(userToUpdate);
 
-		oper.setOperValidity("Success");
+		oper.setOperValidity("success");
 		oper.setDescription("User Update Done");
+		oper.setResult(userToUpdate);
 
 		return oper;
 	}
 
 	@ResponseBody
-	@RequestMapping("/getUsers")
-	public Object getUserByAdminManager(@RequestParam("securityKey")String securityKey){
+	@GetMapping("/getUsers")
+	public Object getUserByAdminManager(@RequestHeader(value="securityKey") String securityKey){
 
 		User user = userService.findUserBySecurityKey(securityKey);
 
+		OperationResponse oper = new OperationResponse();
 		if(user==null) {
-			OperationResponse oper = new OperationResponse();
-			oper.setOperValidity("Failure! User Key not correct!");
-			oper.setDescription("User is not valid!!");
+			oper.setOperValidity("failure");
+			oper.setDescription("User Key not correct! User is not valid!!");
 			return oper;
 		}
 
@@ -298,19 +305,22 @@ public class UserController {
 
 		System.out.println(copyUsers);
 
-		return copyUsers;
+		oper.setOperValidity("success");
+		oper.setDescription("API is hit with proper input");
+		oper.setResult(copyUsers);
+		return oper;
 
 
 	}
 
 	@ResponseBody
 	@ExceptionHandler(value=Exception.class)
-	public OperationResponse exceptionHandler() {
+	public OperationResponse exceptionHandler(Exception e) {
 		OperationResponse oper = new OperationResponse();
 
-		oper.setOperValidity("Data not correct");
+		oper.setOperValidity("failure");
 		oper.setDescription("Data not accepted! Please retry!");
-
+		oper.setResult(e.getMessage());
 		return oper;
 	}
 
