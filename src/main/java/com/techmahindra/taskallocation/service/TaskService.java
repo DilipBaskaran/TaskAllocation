@@ -7,6 +7,6 @@ import com.techmahindra.taskallocation.models.User;
 
 public interface TaskService {
 
-	public List<Task> getTasks(Long userId);
-	public Task saveTask(Long userId, Task task);
+	public List<Task> getTasks(User user);
+	public Task saveTask(User user, Task task);
 }

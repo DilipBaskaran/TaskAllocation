@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -56,6 +58,7 @@ public class UserController {
 			if(userService.findSuperAdmins().size() ==0) {
 				registeringUser = new User();
 				registeringUser.setgID("FirstUser");
+				registeringUser.setIsSuperAdmin(true);
 			}
 		}else {
 			registeringUser = userService.findUserBySecurityKey(securityKey);
@@ -151,14 +154,13 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/setPassword")
-	public OperationResponse setPassword(@RequestHeader(value="securityKey") String userName,
+	public OperationResponse setPassword(@RequestParam("username") String userName,
 			@RequestParam("password") String password) {
 
 		OperationResponse oper = new OperationResponse();
 
 		oper.setOperValidity("failure");
 		oper.setDescription("Data not correct! UserName Password combination is not accepted");
-
 
 		if(password == null || userName==null)
 			return oper;
@@ -280,17 +282,129 @@ public class UserController {
 
 	@ResponseBody
 	@GetMapping("/getUsers")
-	public Object getUserByAdminManager(@RequestHeader(value="securityKey") String securityKey){
+	public Object getSubordinates(@RequestHeader(value="securityKey") String securityKey){
 
 		User user = userService.findUserBySecurityKey(securityKey);
-
+		
 		OperationResponse oper = new OperationResponse();
-		if(user==null) {
+		if(user==null || !(user.getIsSuperAdmin() || user.getIsAdmin())) {
 			oper.setOperValidity("failure");
 			oper.setDescription("User Key not correct! User is not valid!!");
 			return oper;
 		}
 
+		List<User> userList = getUserList(user);
+
+		System.out.println(userList);
+
+		oper.setOperValidity("success");
+		oper.setDescription("API is hit with proper input");
+		oper.setResult(userList);
+		return oper;
+
+
+	}
+	
+	@ResponseBody
+	@GetMapping("/getUser/{id}")
+	public Object getUser(@RequestHeader(value="securityKey") String securityKey,
+			@PathVariable(name="id") Long id){
+
+		User adminUser = userService.findUserBySecurityKey(securityKey);
+
+		OperationResponse oper = new OperationResponse();
+		if(adminUser==null || !(adminUser.getIsSuperAdmin() || adminUser.getIsAdmin())) {
+			oper.setOperValidity("failure");
+			oper.setDescription("User Key not correct / User is not valid to hit this api!!");
+			return oper;
+		}
+		
+		User user = userService.findById(id);
+		if(user==null) {
+			oper.setOperValidity("failure");
+			oper.setDescription("User details not present!!");
+			oper.setResult("User id is not valid ");
+			return oper;
+		}
+
+
+		oper.setOperValidity("success");
+		oper.setDescription("UserDetail for User with id : "+id);
+		oper.setResult(user);
+		return oper;
+
+
+	}
+	
+	@ResponseBody
+	@GetMapping("/getUsers/{id}")
+	public Object getSubordinateOfOtherUser(@RequestHeader(value="securityKey") String securityKey,
+			@PathVariable(name="id") Long id){
+
+		User user = userService.findUserBySecurityKey(securityKey);
+
+		OperationResponse oper = new OperationResponse();
+		if(user==null || !user.getIsSuperAdmin()) {
+			oper.setOperValidity("failure");
+			oper.setDescription("User Key not correct / User is not valid to hit this api!!");
+			return oper;
+		}
+		
+		User adminUser = userService.findById(id);
+		if(adminUser==null || !(adminUser.getIsSuperAdmin() || adminUser.getIsAdmin())) {
+			oper.setOperValidity("failure");
+			oper.setDescription("User Key not correct! User is not valid to hit this api!!");
+			oper.setResult("User is not Admin/SuperAdmin");
+			return oper;
+		}
+
+		List<User> users = getUserList(adminUser);
+
+		oper.setOperValidity("success");
+		oper.setDescription("User List for User with id : "+id);
+		oper.setResult(users);
+		return oper;
+
+
+	}
+	
+	@ResponseBody
+	@DeleteMapping("/deleteUser/{id}")
+	public Object deleteUser(@RequestHeader(value="securityKey") String securityKey,
+			@PathVariable(name = "id") Long id){
+
+		User superAdminUser = userService.findUserBySecurityKey(securityKey);
+
+		OperationResponse oper = new OperationResponse();
+		if(superAdminUser==null || !superAdminUser.getIsSuperAdmin()) {
+			oper.setOperValidity("failure");
+			oper.setDescription("User Key not correct! User is not valid to delete!!");
+			return oper;
+		}
+		
+		User userToDelete = userService.findById(id);
+		
+		if(userToDelete==null || userToDelete.getIsAdmin() || userToDelete.getIsSuperAdmin()) {
+			List<User> users = userService.findUsersByAdmin(userToDelete.getEmail());
+			if(users == null || users.size()!=0) {
+				oper.setOperValidity("failure");
+				oper.setDescription("User cannot be deleted");
+				oper.setResult("Subordinates available under this user");
+				return oper;
+			}
+		}
+		
+		userService.deleteUser(userToDelete);
+		
+		
+		oper.setOperValidity("success");
+		oper.setDescription("User with id "+id+ " is deleted");
+		return oper;
+
+
+	}
+	
+	private List<User> getUserList(User user){
 		List<User> users = userService.findUsersByAdmin(user.getEmail());
 
 		List<User> copyUsers  = new ArrayList(users);
@@ -302,26 +416,8 @@ public class UserController {
 					copyUsers.addAll(subordinates);
 			}
 		}
-
-		System.out.println(copyUsers);
-
-		oper.setOperValidity("success");
-		oper.setDescription("API is hit with proper input");
-		oper.setResult(copyUsers);
-		return oper;
-
-
-	}
-
-	@ResponseBody
-	@ExceptionHandler(value=Exception.class)
-	public OperationResponse exceptionHandler(Exception e) {
-		OperationResponse oper = new OperationResponse();
-
-		oper.setOperValidity("failure");
-		oper.setDescription("Data not accepted! Please retry!");
-		oper.setResult(e.getMessage());
-		return oper;
+		
+		return copyUsers;
 	}
 
 }

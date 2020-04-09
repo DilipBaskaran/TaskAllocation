@@ -1,18 +1,21 @@
 package com.techmahindra.taskallocation.models;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +25,7 @@ public class User {
 
 	@Id	
 	@GeneratedValue
-	private long id;
+	private Long id;
 
 	@NotNull(message="Name cannot be empty")
 	private String name;
@@ -37,7 +40,8 @@ public class User {
 	regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
 	private String email;
 		
-	//@NotBlank(message="Admin Manager cannot be empty")
+	@Email(message = "Email structure should be proper",
+			regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
 	private String adminManager;
 
 	@NotNull(message="isActive cannot be empty")
@@ -73,6 +77,9 @@ public class User {
 	private String securityKey;
 	
 	
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
+	private List<Task> tasks;
 	/*
 	 * @JsonIgnore
 	 * 
@@ -115,11 +122,11 @@ public class User {
 
 
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -305,7 +312,21 @@ public class User {
 		this.updatedDateTime = updatedDateTime;
 	}
 
-	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
+	}
+
+	public void addTask(Task task){
+		if(tasks == null) {
+			tasks = new ArrayList<Task>();
+			
+		}
+		tasks.add(task);
+	}
 
 
 

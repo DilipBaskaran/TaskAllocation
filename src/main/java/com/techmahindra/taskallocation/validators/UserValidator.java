@@ -36,6 +36,9 @@ public class UserValidator implements Validator{
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isAdmin", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "isCandidate", "NotEmpty");
         
+        if(!isCreate && user.getId() == null)
+        	errors.rejectValue("id", "User id should not be empty while updating");
+        
         if (user.getgID().length() != 10)
             errors.rejectValue("gID", "Size.user.username");
         

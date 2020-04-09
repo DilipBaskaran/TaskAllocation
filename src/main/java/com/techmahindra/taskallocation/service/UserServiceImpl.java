@@ -85,5 +85,11 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return userRepository.findUsersByisSuperAdmin(true);
 	}
+	@Override
+	public void deleteUser(User user) {
+		
+		userRepository.delete(user);
+		
+	}
 
 }

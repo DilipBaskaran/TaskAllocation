@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.techmahindra.taskallocation.models.Task;
 import com.techmahindra.taskallocation.models.User;
 
-//@Repository
-public interface TaskRepository {//extends JpaRepository<Task, Long> {
+@Repository
+public interface TaskRepository extends JpaRepository<Task, Long> {
 	
 	public List<Task> findAllTaskByUser(User user);
 

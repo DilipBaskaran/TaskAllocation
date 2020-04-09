@@ -1,0 +1,392 @@
+{
+	"info": {
+		"_postman_id": "2100f6ae-4cfe-43a5-918b-e8cae11572d6",
+		"name": "TaskAllocation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TaskAllocation_User_Registration",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA4VDEyOjEwOjU4LjA0Mw==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Testing User5\",\n\t\"gID\":\"TT00000005\",\n\t\"email\":\"TT00000005@techmahindra\",\n\t\"isSuperAdmin\":\"false\",\n\t\"isActive\":\"true\",\n\t\"isAdmin\":\"true\",\n\t\"isCandidate\":\"false\",\n\t\"adminManager\":\"TT00000001@techmahindra.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/user/registration",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/login?username=TT00000003&password=abc123w",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"login"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "TT00000003"
+						},
+						{
+							"key": "password",
+							"value": "abc123w"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_ForgotPassword",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/user/forgotPassword?username=TT00000003",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"forgotPassword"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "TT00000003"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_ConfirmUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/user/confirmuser?username=TT00000003&uniqueno=9518",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"confirmuser"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "TT00000003"
+						},
+						{
+							"key": "uniqueno",
+							"value": "9518"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_SetPassword",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/user/setPassword?username=TT00000003&password=testing123",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"setPassword"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "TT00000003"
+						},
+						{
+							"key": "password",
+							"value": "testing123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/user/info?securityKey=VFQwMDAwMDAwNjphYmMxMjM6MjAyMC0wNC0wNw==",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"info"
+					],
+					"query": [
+						{
+							"key": "securityKey",
+							"value": "VFQwMDAwMDAwNjphYmMxMjM6MjAyMC0wNC0wNw=="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_getSubordinates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8200/user/getUsers?securityKey=VFQwMDAwMDAwMzp0ZXN0aW5nMTIzOjIwMjAtMDQtMDc=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"getUsers"
+					],
+					"query": [
+						{
+							"key": "securityKey",
+							"value": "VFQwMDAwMDAwMzp0ZXN0aW5nMTIzOjIwMjAtMDQtMDc="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_UpdateProfile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\":\"3\",\n\t\"name\":\"Testing3 User3\",\n\t\"gID\":\"TT00000003\",\n\t\"email\":\"TT00000003@techmahindra.com\",\n\t\"isSuperAdmin\":\"false\",\n\t\"isActive\":\"true\",\n\t\"isAdmin\":\"false\",\n\t\"isCandidate\":\"true\",\n\t\"adminManager\":\"TT00000002@techmahindra.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/user/updateProfile?securityKey=VFQwMDAwMDAwMjphYmMxMjM6MjAyMC0wNC0wNw==",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"updateProfile"
+					],
+					"query": [
+						{
+							"key": "securityKey",
+							"value": "VFQwMDAwMDAwMjphYmMxMjM6MjAyMC0wNC0wNw=="
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_addTask",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA4VDEyOjEwOjU4LjA0Mw==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"testTask\",\n\t\"description\":\"task description\",\n\t\"expiry\":\"2020-04-10\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/tasks/addTask",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"addTask"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_getTasks",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA4VDEyOjEwOjU4LjA0Mw==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/tasks/getTasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"getTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_DeleteUserWithID",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA4VDEyOjEwOjU4LjA0Mw==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/user/deleteUser/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"deleteUser",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_getSubordinatesById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/user/getUsers/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"getUsers",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_User_GetUserById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/user/getUser/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"user",
+						"getUser",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -25,5 +25,7 @@ public interface UserService {
 	public long findCountOfUsers();
 	
 	public List<User> findSuperAdmins();
+	
+	public void deleteUser(User user);
 
 }
