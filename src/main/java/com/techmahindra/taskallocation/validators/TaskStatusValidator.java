@@ -1,7 +1,5 @@
 package com.techmahindra.taskallocation.validators;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -9,13 +7,14 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import com.techmahindra.taskallocation.models.Task;
-import com.techmahindra.taskallocation.service.TaskService;
+import com.techmahindra.taskallocation.models.TaskStatus;
+import com.techmahindra.taskallocation.service.TaskStatusService;
 
 @Component
-public class TaskValidator implements Validator{
+public class TaskStatusValidator implements Validator{
 	
 	@Autowired
-    private TaskService taskService;
+    private TaskStatusService taskStatusService;
 
     @Override
     public boolean supports(Class<?> aClass) {
@@ -28,17 +27,14 @@ public class TaskValidator implements Validator{
     }
 
     public void validate(Object o, Errors errors,boolean isCreate) {
-        Task task = (Task) o;
+        TaskStatus taskStatus = (TaskStatus) o;
 
-
-        if(!isCreate && task.getId()==null) 
-        	errors.rejectValue("id", "Id should not be null during update");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "statusKey", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "statusName", "NotEmpty");
         
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "title", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
-        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "status", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dueDate", "NotEmpty");
-        
+        if(isCreate && taskStatusService.findByStatusKey(taskStatus.getStatusKey())!=null)
+        	errors.rejectValue("statusKey", "statusKey should be unique");
+        	
         
     }
 }

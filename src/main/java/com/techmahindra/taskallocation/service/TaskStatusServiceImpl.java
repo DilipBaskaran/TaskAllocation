@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.techmahindra.taskallocation.dao.TaskStatusRepository;
 import com.techmahindra.taskallocation.models.TaskStatus;
 
-//@Service
+@Service
 public class TaskStatusServiceImpl implements TaskStatusService {
 
 	@Autowired
@@ -23,6 +23,18 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 	public List<TaskStatus> getAllTaskStatus() {
 		// TODO Auto-generated method stub
 		return taskStatusRepository.findAll();
+	}
+
+	@Override
+	public TaskStatus findByStatusKey(String statusKey) {
+		// TODO Auto-generated method stub
+		return taskStatusRepository.findBystatusKey(statusKey);
+	}
+
+	@Override
+	public TaskStatus findById(Long id) {
+		// TODO Auto-generated method stub
+		return taskStatusRepository.findById(id).get();
 	}
 
 }

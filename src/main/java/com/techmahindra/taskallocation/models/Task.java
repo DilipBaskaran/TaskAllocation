@@ -2,13 +2,15 @@ package com.techmahindra.taskallocation.models;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.FutureOrPresent;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,22 +29,30 @@ public class Task {
 	
 	private String description;
 	
-	@FutureOrPresent
-	private LocalDate expiry;
+	private LocalDate dueDate;
 	
-	//@ManyToOne(cascade = CascadeType.ALL)
-	private String status;
+	@ManyToOne(fetch=FetchType.EAGER)
+	private TaskStatus taskStatus;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private Priority priority;
 	
 	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL)
-	private User user;
+	@OneToMany(mappedBy = "task",fetch = FetchType.EAGER)
+	private List<TaskComments> taskComments;
 	
-	private String createdBy;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private User assignedTo;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
+	private User createdBy;
 
 	@CreationTimestamp
 	private LocalDateTime createdDateTime;
 
-	private String updatedBy;
+	@ManyToOne(fetch=FetchType.EAGER)
+	private User updatedBy;
 
 	@UpdateTimestamp
 	private LocalDateTime updatedDateTime;
@@ -51,15 +61,12 @@ public class Task {
 		
 	}
 
-	public Task(String title, String description, LocalDate expiry, String status) {
+	public Task(String title, String description, LocalDate dueDate, String status) {
 		super();
 		this.title = title;
 		this.description = description;
-		this.expiry = expiry;
-		this.status = status;
+		this.dueDate = dueDate;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -77,35 +84,35 @@ public class Task {
 		this.description = description;
 	}
 
-	public LocalDate getExpiry() {
-		return expiry;
+	public LocalDate getDueDate() {
+		return dueDate;
 	}
 
-	public void setExpiry(LocalDate expiry) {
-		this.expiry = expiry;
+	public void setDueDate(LocalDate dueDate) {
+		this.dueDate = dueDate;
 	}
 
-	public String getStatus() {
-		return status;
+	public Priority getPriority() {
+		return priority;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setPriority(Priority priority) {
+		this.priority = priority;
 	}
 
-	public User getUser() {
-		return user;
+	public User getAssignedTo() {
+		return assignedTo;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setAssignedTo(User assignedTo) {
+		this.assignedTo = assignedTo;
 	}
 	
-	public String getCreatedBy() {
+	public User getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -117,11 +124,11 @@ public class Task {
 		this.createdDateTime = createdDateTime;
 	}
 
-	public String getUpdatedBy() {
+	public User getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(User updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 
@@ -143,8 +150,8 @@ public class Task {
 
 	@Override
 	public String toString() {
-		return "Task [id=" + id + ", title=" + title + ", description=" + description + ", expiry=" + expiry
-				+ ", status=" + status + ", createdBy=" + createdBy + ", createdDateTime=" + createdDateTime
+		return "Task [id=" + id + ", title=" + title + ", description=" + description + ", dueDate=" + dueDate +", assignedTo="+assignedTo.getId()
+				+ ", createdBy=" + createdBy + ", createdDateTime=" + createdDateTime
 				+ ", updatedBy=" + updatedBy + ", updatedDateTime=" + updatedDateTime + "]";
 	}
 
@@ -153,8 +160,7 @@ public class Task {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + ((expiry == null) ? 0 : expiry.hashCode());
-		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((dueDate == null) ? 0 : dueDate.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -173,15 +179,10 @@ public class Task {
 				return false;
 		} else if (!description.equals(other.description))
 			return false;
-		if (expiry == null) {
-			if (other.expiry != null)
+		if (dueDate == null) {
+			if (other.dueDate != null)
 				return false;
-		} else if (!expiry.equals(other.expiry))
-			return false;
-		if (status == null) {
-			if (other.status != null)
-				return false;
-		} else if (!status.equals(other.status))
+		} else if (!dueDate.equals(other.dueDate))
 			return false;
 		if (title == null) {
 			if (other.title != null)
@@ -190,6 +191,33 @@ public class Task {
 			return false;
 		return true;
 	}
+
+	public TaskStatus getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(TaskStatus taskStatus) {
+		this.taskStatus = taskStatus;
+	}
+
+	public List<TaskComments> getTaskComments() {
+		return taskComments;
+	}
+
+	public void setTaskComments(List<TaskComments> taskComments) {
+		this.taskComments = taskComments;
+	}
+	
+	public void addTaskComment(TaskComments taskComment) {
+		if(taskComments == null) {
+			taskComments = new ArrayList<TaskComments>();
+		}
+		
+		taskComments.add(taskComment);
+		
+	}
+	
+	
 
 	
 }

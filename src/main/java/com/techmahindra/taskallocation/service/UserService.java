@@ -20,12 +20,19 @@ public interface UserService {
 	
 	public User findUserBySecurityKey(String securityKey);
 	
-	public List<User> findUsersByAdmin(String adminManager);
+	public List<User> findAllUsersByAdmin(String adminManager);
 	
-	public long findCountOfUsers();
+	public List<User> findDirectUsersByAdmin(String adminManager);
 	
 	public List<User> findSuperAdmins();
 	
 	public void deleteUser(User user);
+	
+	public List<User> findBynameContaining(String name);
+	
+	public List<User> findBygIDContining(String gID);
+	
+	public List<User> findByAdminAndNameOrGIdContaining(String adminEmail,String name, String gID);
+	
 
 }

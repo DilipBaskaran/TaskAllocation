@@ -1,6 +1,6 @@
 package com.techmahindra.taskallocation.service;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +16,6 @@ public class UserServiceImpl implements UserService{
 
 	@Autowired
 	UserRepository userRepository;
-
-	//@Autowired
-	//private PasswordEncoder passwordEncoder;
-
 
 	@Autowired
 	private EmailSenderService emailSenderService;
@@ -54,42 +50,74 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findById(long id) {
-		
+
 		Optional<User> optionalUser =userRepository.findById(id); 
-		
+
 		return optionalUser.isPresent()?optionalUser.get():null;
-		
+
 	}
 	@Override
 	public User findUserBySecurityKey(String securityKey) {
-
 		return userRepository.findUserBysecurityKey(securityKey);
 	}
+
 	@Override
-	public List<User> findUsersByAdmin(String adminManager) {
-		// TODO Auto-generated method stub
-		return userRepository.findUsersByadminManager(adminManager);
+	public List<User> findAllUsersByAdmin(String adminManager) {
+
+
+		List<User> users = userRepository.findUsersByadminManager(adminManager);
+		List<User> copyUsers  = new ArrayList(users);
+
+		for(User userRec : users) {
+			copyUsers.add(userRec);
+			while(userRec.getIsAdmin() || userRec.getIsSuperAdmin()) {
+				List<User> subordinates = userRepository.findUsersByadminManager(userRec.getEmail()); 
+				if(subordinates != null)
+					copyUsers.addAll(subordinates);
+			}
+		}
+
+		return copyUsers;
 	}
+
+	public List<User> findDirectUsersByAdmin(String adminManager) {
+		List<User> users = userRepository.findUsersByadminManager(adminManager);
+		return users;
+	}
+
 	@Override
 	public User findByEmail(String email) {
-		// TODO Auto-generated method stub
 		return userRepository.findUserByemail(email);
 	}
+
 	@Override
 	public long findCountOfUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.count();
 	}
+
 	@Override
 	public List<User> findSuperAdmins() {
-		// TODO Auto-generated method stub
 		return userRepository.findUsersByisSuperAdmin(true);
 	}
+
 	@Override
 	public void deleteUser(User user) {
-		
 		userRepository.delete(user);
-		
+	}
+
+	@Override
+	public List<User> findBynameContaining(String name) {
+		return userRepository.findBynameContaining(name);
+	}
+
+	@Override
+	public List<User> findBygIDContining(String gID) {
+		return userRepository.findBygIDContaining(gID);
+	}
+
+	@Override
+	public List<User> findByAdminAndNameOrGIdContaining(String adminEmail, String name, String gID) {
+		return userRepository.findByAdminAndNameOrGIdContaining(adminEmail, name, gID);
 	}
 
 }

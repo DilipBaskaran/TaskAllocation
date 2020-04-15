@@ -3,10 +3,8 @@ package com.techmahindra.taskallocation.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -14,32 +12,32 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class TaskStatus {
-	
+public class Priority {
+
 	@Id
 	@GeneratedValue
 	private Long id;
 	
-	@Column(unique= true)
-	private String statusKey;
+	@Column(unique = true)
+	private String priorityKey;
 	
-	private String statusValue;
+	private String priorityValue;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="priority")
+	private List<Task> tasks;
 	
 	@Column(unique= true)
 	private int sortOrder;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy ="taskStatus",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private List<Task> tasks;
-	
-	
-	public TaskStatus() {
+	Priority(){
 		
 	}
 
-	public TaskStatus(String statusName) {
+	public Priority(String priorityKey, String priorityValue) {
 		super();
-		this.statusValue = statusName;
+		this.priorityKey = priorityKey;
+		this.priorityValue = priorityValue;
 	}
 
 	public Long getId() {
@@ -50,16 +48,28 @@ public class TaskStatus {
 		this.id = id;
 	}
 
-	public String getStatusValue() {
-		return statusValue;
+	public String getPriorityKey() {
+		return priorityKey;
 	}
 
-	public void setStatusValue(String statusValue) {
-		this.statusValue = statusValue;
+	public void setPriorityKey(String priorityKey) {
+		this.priorityKey = priorityKey;
+	}
+
+	public String getPriorityValue() {
+		return priorityValue;
+	}
+
+	public void setPriorityValue(String priorityValue) {
+		this.priorityValue = priorityValue;
 	}
 
 	public List<Task> getTasks() {
 		return tasks;
+	}
+
+	public void setTasks(List<Task> tasks) {
+		this.tasks = tasks;
 	}
 	
 	public void addTask(Task task) {
@@ -69,18 +79,6 @@ public class TaskStatus {
 		this.tasks.add(task);
 	}
 
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-
-	public String getStatusKey() {
-		return statusKey;
-	}
-
-	public void setStatusKey(String statusKey) {
-		this.statusKey = statusKey;
-	}
 	
 	public int getSortOrder() {
 		return sortOrder;
@@ -94,8 +92,8 @@ public class TaskStatus {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((statusKey == null) ? 0 : statusKey.hashCode());
-		result = prime * result + ((statusValue == null) ? 0 : statusValue.hashCode());
+		result = prime * result + ((priorityKey == null) ? 0 : priorityKey.hashCode());
+		result = prime * result + ((priorityValue == null) ? 0 : priorityValue.hashCode());
 		return result;
 	}
 
@@ -107,25 +105,24 @@ public class TaskStatus {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TaskStatus other = (TaskStatus) obj;
-		if (statusKey == null) {
-			if (other.statusKey != null)
+		Priority other = (Priority) obj;
+		if (priorityKey == null) {
+			if (other.priorityKey != null)
 				return false;
-		} else if (!statusKey.equals(other.statusKey))
+		} else if (!priorityKey.equals(other.priorityKey))
 			return false;
-		if (statusValue == null) {
-			if (other.statusValue != null)
+		if (priorityValue == null) {
+			if (other.priorityValue != null)
 				return false;
-		} else if (!statusValue.equals(other.statusValue))
+		} else if (!priorityValue.equals(other.priorityValue))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "TaskStatus [id=" + id + ", statusKey=" + statusKey + ", statusName=" + statusValue + "]";
+		return "Priority [id=" + id + ", priorityKey=" + priorityKey + ", priorityValue=" + priorityValue + "]";
 	}
 	
 	
-
 }

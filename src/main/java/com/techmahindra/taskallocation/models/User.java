@@ -78,7 +78,7 @@ public class User {
 	
 	
 	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "assignedTo",fetch = FetchType.EAGER)
 	private List<Task> tasks;
 	/*
 	 * @JsonIgnore
@@ -327,24 +327,4 @@ public class User {
 		}
 		tasks.add(task);
 	}
-
-
-
-
-	/*
-	 * public List<Task> getTasks() { return tasks; }
-	 * 
-	 * public void setTasks(List<Task> tasks) { this.tasks = tasks; }
-	 * 
-	 * public void addTask(Task task) { if(this.tasks == null) this.tasks = new
-	 * ArrayList<Task>();
-	 * 
-	 * this.tasks.add(task); }
-	 */
-
-
-
-
-
-
 }

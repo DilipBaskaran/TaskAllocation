@@ -20,34 +20,50 @@ public class TaskServiceImpl implements TaskService {
 	@Autowired
 	TaskRepository taskRepository;
 	
-	/*
-	 * @Autowired TaskStatusRepository taskStatusRepository;
-	 */
+	@Autowired 
+	TaskStatusRepository taskStatusRepository;
 	
 	@Autowired
 	UserRepository userRepository;
-
+	
+	@Autowired
+	UserService userService;
 	
 	@Override
-	public List<Task> getTasks(User user) {
-		
-		return taskRepository.findAllTaskByUser(user);
-		
+	public Task findById(Long id) {
+		return taskRepository.findById(id).get();
 	}
-
+	
 	@Override
-	public Task saveTask(User user, Task task) {
-		
-		//task.setId(null);
-		user.addTask(task);
-		task.setUser(user);
-		 
-		userRepository.save(user);
-		
-		//task = taskRepository.save(task);
-		
+	public Task saveTask(Task task) {
+		task = taskRepository.save(task);
 		return task;
-	
 	}
+	
+	@Override
+	public List<Task> getMyTasks(User user) {
+		return taskRepository.findByAssignedTo(user);
+	}
+	
+	@Override
+	public List<Task> getAllTasks(User user) {
+		
+		List<User> users = userService.findAllUsersByAdmin(user.getEmail());
+		users.add(user);
+		return taskRepository.findByAssignedToIn(users);
+	}
+	
+	@Override
+	public List<Task> getAllNonCompletedTasks(User user) {
+		TaskStatus taskStatus = taskStatusRepository.findBystatusKey("COMPLETED");
+		return taskRepository.findByAssignedToAndTaskStatusNot(user,taskStatus);
+	}
+
+	@Override
+	public List<Task> getAllTasksWithStatus(User user,TaskStatus taskStatus){
+		return taskRepository.findByAssignedToAndTaskStatus(user, taskStatus);
+	}
+
+	
 
 }
