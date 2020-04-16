@@ -1,5 +1,6 @@
 package com.techmahindra.taskallocation.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.techmahindra.taskallocation.models.User;
@@ -71,8 +71,12 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/forgotPassword")
-	public OperationResponse forgotPassword(@RequestParam("username") String username) {
-		User user = userService.findByUserName(username);
+	public OperationResponse forgotPassword(@RequestBody HashMap<String,String> loginMap) {
+		String userName = loginMap.get("username");
+		if(userName==null)
+			return new OperationResponse("failure","Data not correct! User information given are wrong!");
+		
+		User user = userService.findByUserName(userName);
 		if(user == null)
 			return new OperationResponse("failure","Data not correct! User information given are wrong!");
 
@@ -89,12 +93,13 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/confirmuser")
-	public OperationResponse confirmuser(@RequestParam("username") String userName,
-			@RequestParam("uniqueno") String uniqueno) {
-
+	public OperationResponse confirmuser(@RequestBody HashMap<String,String> loginMap) {
+		String userName = loginMap.get("username");
+		String uniqueno = loginMap.get("uniqueno");		
+		if(userName == null || uniqueno == null)
+			return new OperationResponse("failure","Data not correct! UserName & Unique Number combination is wrong!");
+		
 		User user = userService.findByUserName(userName);
-		//System.out.println(user);
-
 		if(user==null || !uniqueno.equalsIgnoreCase(user.getRandomNo())) 
 			return new OperationResponse("failure","Data not correct! UserName & Unique Number combination is wrong!");
 
@@ -103,13 +108,14 @@ public class UserController {
 
 	@ResponseBody
 	@PostMapping("/setPassword")
-	public OperationResponse setPassword(@RequestParam("username") String userName,
-			@RequestParam("password") String password) {
+	public OperationResponse setPassword(@RequestBody HashMap<String,String> loginMap) {
+		
+		String userName = loginMap.get("username");
+		String password = loginMap.get("password");
 		if(password == null || userName==null)
 			new OperationResponse("failure","Data not correct! UserName Password combination is not accepted");
 
 		User user = userService.findByUserName(userName);
-
 		if (user==null) {
 			return new OperationResponse("failure","Data not correct! UserName Password combination is not accepted");
 		}
@@ -138,8 +144,12 @@ public class UserController {
 	@ResponseBody
 	@GetMapping("/searchUser")
 	public Object searchUser(@RequestHeader(value="securityKey") String securityKey,
-			@RequestParam("condition") String condition) {
+			@RequestBody HashMap<String,String> conditionMap) {
 
+		String condition = conditionMap.get("condition");
+		if(condition == null)
+			return new OperationResponse("failure","Data not correct!","condition param is not available");
+		
 		User adminUser = userService.findUserBySecurityKey(securityKey);
 		if(adminUser==null)			
 			return new OperationResponse("failure","Data not correct! Not a valid User!!");
@@ -149,7 +159,6 @@ public class UserController {
 		users.remove(adminUser);
 
 		//System.out.println(users);
-
 		return new OperationResponse("success",
 				"Search User results for condition :"+condition,
 				users);

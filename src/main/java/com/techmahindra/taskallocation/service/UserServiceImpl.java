@@ -91,11 +91,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public long findCountOfUsers() {
-		return userRepository.count();
-	}
-
-	@Override
 	public List<User> findSuperAdmins() {
 		return userRepository.findUsersByisSuperAdmin(true);
 	}

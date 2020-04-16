@@ -174,8 +174,11 @@ public class TaskController {
 
 		Task taskToUpdate = null;
 		
-		if(!isCreate)
+		if(!isCreate) {
 			taskToUpdate = taskService.findById(task.getId());
+			if(taskToUpdate == null)
+				return new OperationResponse("failure","Task Data is not valid!!","id is not valid");	
+		}
 
 		TaskStatus taskStatus = task.getTaskStatus();
 		if(taskStatus.getId() == null) {
@@ -218,27 +221,26 @@ public class TaskController {
 
 		task.setTaskStatus(taskStatus);
 		task.setPriority(priority);
-		if(isCreate)
+		if(isCreate) {
 			task.setCreatedBy(keyUser);
-		else {
-			taskToUpdate.setAssignedTo(task.getAssignedTo());
+			task.setUpdatedBy(keyUser);
+		}else {
+			taskToUpdate.setTitle(task.getTitle());
 			taskToUpdate.setDescription(task.getDescription());
+			taskToUpdate.setAssignedTo(task.getAssignedTo());
+			taskToUpdate.setTaskStatus(task.getTaskStatus());
 			taskToUpdate.setDueDate(task.getDueDate());
 			taskToUpdate.setPriority(task.getPriority());
-			taskToUpdate.setTaskStatus(task.getTaskStatus());
-			taskToUpdate.setTitle(task.getTitle());
 			taskToUpdate.setUpdatedBy(keyUser);
 		}
 		
-		task.setUpdatedBy(keyUser);
 		if(isCreate)
-			task=taskService.saveTask(task);
+			task = taskService.saveTask(task);
 		else
-			task =taskService.saveTask(taskToUpdate);
+			task = taskService.saveTask(taskToUpdate);
 
 		return new OperationResponse("success",
 				"Task assigned to User with id : "+task.getAssignedTo().getId(),
 				task);
-
 	}
 }

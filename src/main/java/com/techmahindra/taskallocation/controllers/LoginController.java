@@ -2,13 +2,14 @@ package com.techmahindra.taskallocation.controllers;
 
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.techmahindra.taskallocation.models.User;
@@ -23,8 +24,12 @@ public class LoginController {
 
 	@ResponseBody
 	@PostMapping("/login")
-	public OperationResponse loginReq(@RequestParam("username") String userName,
-			@RequestParam("password") String password){
+	public OperationResponse loginReq(@RequestBody HashMap<String,String> loginMap){
+		String userName = loginMap.get("username");
+		String password = loginMap.get("password");
+		if(userName == null || password == null)
+			return new OperationResponse("failure","UserName Password combination is not accepted");
+		System.out.println(userName+" "+password);
 		User user = userService.findByUserName(userName);
 		//System.out.println(userName); System.out.println(password);
 		if (user == null  
