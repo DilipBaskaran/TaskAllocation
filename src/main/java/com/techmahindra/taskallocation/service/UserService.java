@@ -20,7 +20,7 @@ public interface UserService {
 	
 	public User findUserBySecurityKey(String securityKey);
 	
-	public List<User> findAllUsersByAdmin(String adminManager);
+	public List<User> findAllUsersByAdmin(User adminManager);
 	
 	public List<User> findDirectUsersByAdmin(String adminManager);
 	

@@ -113,7 +113,7 @@ public class TaskController {
 
 		return new OperationResponse("success",
 				"Tasks for User with id "+user.getId(),
-				taskService.getAllTasks(user));
+				taskService.getMyTasks(user));
 	}
 	
 	@GetMapping("/getAllTasks")
@@ -128,7 +128,7 @@ public class TaskController {
 		
 
 		return new OperationResponse("success",
-				"Tasks for User with id "+user.getId(),
+				"Tasks Available for AllUsers under User with id "+user.getId(),
 				taskService.getAllTasks(user));
 	}
 

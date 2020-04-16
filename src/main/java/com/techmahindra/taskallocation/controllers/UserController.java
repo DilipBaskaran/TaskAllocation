@@ -219,24 +219,7 @@ public class UserController {
 				"User Update Done",
 				userToUpdate);
 	}
-
-	@ResponseBody
-	@GetMapping("/getUsers")
-	public Object getSubordinates(@RequestHeader(value="securityKey") String securityKey){
-
-		User keyUser = userService.findUserBySecurityKey(securityKey);
-
-		if(keyUser==null || !(keyUser.getIsSuperAdmin() || keyUser.getIsAdmin()))
-			return new OperationResponse("failure",
-					"User Key not correct! User is not valid!!");
-
-		List<User> userList = userService.findAllUsersByAdmin(keyUser.getEmail());
-		//System.out.println(userList);
-		return new OperationResponse("success",
-				"Users List under the current user:"+keyUser.getId(),
-				userList);
-	}
-
+	
 	@ResponseBody
 	@GetMapping("/getUser/{id}")
 	public Object getUser(@RequestHeader(value="securityKey") String securityKey,
@@ -256,6 +239,25 @@ public class UserController {
 				user);
 	}
 
+	@ResponseBody
+	@GetMapping("/getUsers")
+	public Object getSubordinates(@RequestHeader(value="securityKey") String securityKey){
+
+		User keyUser = userService.findUserBySecurityKey(securityKey);
+
+		if(keyUser==null || !(keyUser.getIsSuperAdmin() || keyUser.getIsAdmin()))
+			return new OperationResponse("failure",
+					"User Key not correct! User is not valid!!");
+
+		List<User> userList = userService.findAllUsersByAdmin(keyUser);
+		//System.out.println(userList);
+		return new OperationResponse("success",
+				"Users List under the current user:"+keyUser.getId(),
+				userList);
+	}
+
+	
+
 
 
 	@ResponseBody
@@ -270,7 +272,7 @@ public class UserController {
 		if(adminUser==null || !(adminUser.getIsSuperAdmin() || adminUser.getIsAdmin())) 
 			return new OperationResponse("failure","User Key not correct! User is not valid to hit this api!!","User is not Admin/SuperAdmin");
 
-		List<User> users = userService.findAllUsersByAdmin(adminUser.getEmail());
+		List<User> users = userService.findAllUsersByAdmin(adminUser);
 
 		return new OperationResponse("success","User List for User with id : "+id,users);
 	}
@@ -281,18 +283,20 @@ public class UserController {
 			@PathVariable(name = "id") Long id){
 		User superAdminUser = userService.findUserBySecurityKey(securityKey);
 
+		System.out.println(id);
 		if(superAdminUser==null || !superAdminUser.getIsSuperAdmin())
 			return new OperationResponse("failure","User Key not correct! User is not valid to delete!!");
+		
 		User userToDelete = userService.findById(id);
-
-		if(userToDelete==null || userToDelete.getIsAdmin() || userToDelete.getIsSuperAdmin()) {
+		System.out.println(userToDelete);
+		if(userToDelete!=null && (userToDelete.getIsAdmin() || userToDelete.getIsSuperAdmin())) {
 			List<User> users = userService.findDirectUsersByAdmin(userToDelete.getEmail());
-			if(users == null || users.size()!=0)
+			if(users != null && users.size()!=0)
 				return new OperationResponse("failure","User cannot be deleted","Subordinates available under this user");
 		}
 
 		userService.deleteUser(userToDelete);
-
+		//System.out.println("userDeleted");
 
 		return new OperationResponse("success","User with id "+id+ " is deleted");
 	}

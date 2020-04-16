@@ -48,7 +48,7 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public List<Task> getAllTasks(User user) {
 		
-		List<User> users = userService.findAllUsersByAdmin(user.getEmail());
+		List<User> users = userService.findAllUsersByAdmin(user);
 		users.add(user);
 		return taskRepository.findByAssignedToIn(users);
 	}

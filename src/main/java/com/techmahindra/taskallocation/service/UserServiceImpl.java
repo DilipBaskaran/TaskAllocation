@@ -1,8 +1,10 @@
 package com.techmahindra.taskallocation.service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -62,22 +64,26 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public List<User> findAllUsersByAdmin(String adminManager) {
+	public List<User> findAllUsersByAdmin(User adminManager) {
 
-
-		List<User> users = userRepository.findUsersByadminManager(adminManager);
-		List<User> copyUsers  = new ArrayList(users);
-
-		for(User userRec : users) {
-			copyUsers.add(userRec);
-			while(userRec.getIsAdmin() || userRec.getIsSuperAdmin()) {
-				List<User> subordinates = userRepository.findUsersByadminManager(userRec.getEmail()); 
-				if(subordinates != null)
-					copyUsers.addAll(subordinates);
+		List<User> userList  = new ArrayList<User>();
+		
+		Queue<User> queue = new LinkedList<User>();
+		queue.add(adminManager);
+		while(!queue.isEmpty()) {
+			User user = queue.remove();
+			//System.out.println("Manager:"+user);
+			List<User> users = userRepository.findUsersByadminManager(user.getEmail());
+			for(User userRec : users) {
+				userList.add(userRec);
+				//System.out.println("user:"+userRec);
+				if(userRec.getIsAdmin() || userRec.getIsSuperAdmin()) {
+					queue.add(userRec);
+				}
 			}
 		}
 
-		return copyUsers;
+		return userList;
 	}
 
 	public List<User> findDirectUsersByAdmin(String adminManager) {
