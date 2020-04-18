@@ -17,5 +17,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 	public List<Task> findByAssignedToAndTaskStatus(User assignedTo,TaskStatus taskStatus);
 	public List<Task> findByAssignedToAndPriority(User assignedTo,Priority priority);
 	public List<Task> findByAssignedToAndTaskStatusNot(User assignedTo, TaskStatus taskStatus);
+	public List<Task> findByAssignedToInAndTaskStatusNot(List<User> assignedTo, TaskStatus taskStatus);
 	public List<Task> findByAssignedToAndPriorityNot(User assignedTo,Priority priority);
 }

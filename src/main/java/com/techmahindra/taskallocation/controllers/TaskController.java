@@ -4,7 +4,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techmahindra.taskallocation.models.Priority;
 import com.techmahindra.taskallocation.models.Task;
+import com.techmahindra.taskallocation.models.TaskComments;
 import com.techmahindra.taskallocation.models.TaskStatus;
 import com.techmahindra.taskallocation.models.User;
 import com.techmahindra.taskallocation.responses.OperationResponse;
 import com.techmahindra.taskallocation.service.PriorityService;
+import com.techmahindra.taskallocation.service.TaskCommentsService;
 import com.techmahindra.taskallocation.service.TaskService;
 import com.techmahindra.taskallocation.service.TaskStatusService;
 import com.techmahindra.taskallocation.service.UserService;
@@ -29,6 +33,9 @@ public class TaskController {
 
 	@Autowired
 	TaskService taskService;
+	
+	@Autowired
+	TaskCommentsService taskCommentsService;
 
 	@Autowired
 	private TaskValidator taskValidator;
@@ -130,6 +137,59 @@ public class TaskController {
 		return new OperationResponse("success",
 				"Tasks Available for AllUsers under User with id "+user.getId(),
 				taskService.getAllTasks(user));
+	}
+	
+	@GetMapping("/getUserTasks/{id}")
+	public OperationResponse getUserSpecificTasks(@RequestHeader(name = "securityKey") String securityKey ,
+			@PathVariable Long id){
+
+		User adminUser = userService.findUserBySecurityKey(securityKey);
+
+		if(adminUser == null)
+			return new OperationResponse("failure","User Key is not valid!!");
+
+		//System.out.println(userId);
+		
+		User user = userService.findById(id);
+		
+		if(user == null)
+			return new OperationResponse("failure","User is not valid!!","There is no valid user with given id.");
+
+		return new OperationResponse("success",
+				"Tasks Available for AllUsers under User with id "+adminUser.getId(),
+				taskService.getAllNonCompletedTasks(user));
+	}
+	
+	@GetMapping("/getAllUsersTasks")
+	public OperationResponse getAllUsersTasks(@RequestHeader(name = "securityKey") String securityKey ){
+
+		User user = userService.findUserBySecurityKey(securityKey);
+
+		if(user == null)
+			return new OperationResponse("failure","User is not valid!!");
+
+		//System.out.println(userId);
+		
+
+		return new OperationResponse("success",
+				"Tasks Available for AllUsers under User with id "+user.getId(),
+				taskService.getAllUsersTasks(user));
+	}
+	
+	@GetMapping("/getAllUsersAllTasks")
+	public OperationResponse getAllUsersAllTasks(@RequestHeader(name = "securityKey") String securityKey ){
+
+		User user = userService.findUserBySecurityKey(securityKey);
+
+		if(user == null)
+			return new OperationResponse("failure","User is not valid!!");
+
+		//System.out.println(userId);
+		
+
+		return new OperationResponse("success",
+				"Tasks Available for AllUsers under User with id "+user.getId(),
+				taskService.getAllUsersAllTasks(user));
 	}
 
 	@PostMapping("/addTask")
@@ -242,5 +302,97 @@ public class TaskController {
 		return new OperationResponse("success",
 				"Task assigned to User with id : "+task.getAssignedTo().getId(),
 				task);
+	}
+	
+	@GetMapping("/{id}/getTaskComments")
+	public OperationResponse getTasksComments(@RequestHeader(name = "securityKey") String securityKey, 
+			@PathVariable Long id ){
+
+		User keyUser = userService.findUserBySecurityKey(securityKey);
+
+		if(keyUser == null)
+			return new OperationResponse("failure","User is not valid!!","securityKey is not valid");
+
+		Task task = taskService.findById(id);
+		
+		if(task == null)
+			return new OperationResponse("failure","Task is not valid!!","id is not valid");
+
+		return new OperationResponse("success",
+				"TaskComments for Task with id "+id,
+				task.getTaskComments());
+	}
+	
+	@PostMapping("/{id}/addTaskComment")
+	public OperationResponse addTasksComment(@RequestHeader(name = "securityKey") String securityKey,
+			@Valid @RequestBody TaskComments taskComment, 
+			@PathVariable Long id){
+
+		User keyUser = userService.findUserBySecurityKey(securityKey);
+
+		if(keyUser == null)
+			return new OperationResponse("failure","User is not valid!!","securityKey is not valid");
+
+		Task task = taskService.findById(id);
+		
+		if(task == null)
+			return new OperationResponse("failure","Task is not valid!!","id is not valid");
+		
+		taskComment.setTask(task);
+		task.addTaskComment(taskComment);
+		taskComment.setCommentedBy(keyUser);
+		
+		taskComment = taskCommentsService.saveTaskComment(taskComment);
+
+		return new OperationResponse("success",
+				"TaskComments created for Task with id "+id,
+				taskComment);
+	}
+	@PutMapping("/{id}/updateTaskComment")
+	public OperationResponse updateTasksComment(@RequestHeader(name = "securityKey") String securityKey,
+			@Valid @RequestBody TaskComments taskComment, 
+			@PathVariable Long id){
+
+		User keyUser = userService.findUserBySecurityKey(securityKey);
+
+		if(keyUser == null)
+			return new OperationResponse("failure","User is not valid!!","securityKey is not valid");
+
+		Task task = taskService.findById(id);
+		
+		if(task == null)
+			return new OperationResponse("failure","Task is not valid!!","id is not valid");
+		
+		TaskComments taskCommentToUpdate = taskCommentsService.findById(taskComment.getCommentId());
+		
+		if(taskCommentToUpdate == null || !task.equals(taskCommentToUpdate.getTask()))
+			return new OperationResponse("failure","Task is not valid!!","Taskid/TaskCommentId is not valid");
+		
+		taskCommentToUpdate.setTask(task);
+		taskCommentToUpdate.setCommentedBy(keyUser);
+		taskCommentToUpdate.setComment(taskComment.getComment());
+		task.addTaskComment(taskCommentToUpdate);
+		taskComment = taskCommentsService.saveTaskComment(taskCommentToUpdate);
+
+		return new OperationResponse("success",
+				"TaskComments updated for Taskcomment with id "+taskCommentToUpdate.getCommentId(),
+				taskComment);
+	}
+	@DeleteMapping("/deleteTaskComment/{id}")
+	public OperationResponse updateTasksComment(@RequestHeader(name = "securityKey") String securityKey, 
+			@PathVariable Long id){
+
+		User keyUser = userService.findUserBySecurityKey(securityKey);
+
+		if(keyUser == null)
+			return new OperationResponse("failure","User is not valid!!","securityKey is not valid");
+
+		TaskComments taskComment = taskCommentsService.findById(id);
+		if(taskComment == null)
+			return new OperationResponse("failure","TaskComment is not valid!!","TaskComment id is not valid");
+		
+		taskCommentsService.deleteTaskComment(taskComment);
+		return new OperationResponse("success",
+				"TaskComments deleted with id "+ id);
 	}
 }

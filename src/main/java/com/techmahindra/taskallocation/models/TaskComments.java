@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,20 +16,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
-class TaskComments {
+public class TaskComments {
 	
 	@Id
 	@GeneratedValue
-	private Long commentId;
+	private Long commentId;	
 	
-	
+	@NotBlank(message = "Cannot be blank")
 	private String comment;
 	
 	@JsonIgnore
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER)
 	Task task;
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private User commentedBy;
 	
 	@UpdateTimestamp

@@ -12,6 +12,9 @@ public interface TaskService {
 	public Task saveTask(Task task);
 	public List<Task> getMyTasks(User user);
 	public List<Task> getAllTasks(User user);
+	public List<Task> getAllUsersTasks(User user);
+	public List<Task> getAllUsersAllTasks(User user);
 	public List<Task> getAllNonCompletedTasks(User user);
 	public List<Task> getAllTasksWithStatus(User user,TaskStatus taskStatus);
+	
 }

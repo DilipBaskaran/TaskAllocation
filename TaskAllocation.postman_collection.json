@@ -497,7 +497,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id\":\"27\",\n\t\"title\":\"Task Title 16/04 1925PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-16\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"INPROGRESS\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"2\"\n\t}\n}",
+					"raw": "{\n\t\"id\":\"27\",\n\t\"title\":\"Task Title 16/04 1925PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-16\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"COMPLETED\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"2\"\n\t}\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -566,6 +566,184 @@
 					"path": [
 						"tasks",
 						"getAllTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_getAllUsersTasks",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securitykey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/tasks/getAllUsersTasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"getAllUsersTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_getAllUsersAllTasks",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/tasks/getAllUsersAllTasks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"getAllUsersAllTasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_addTaskComment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "securitykey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"comment\":\"Test Comment for the task11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/tasks/14/addTaskComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"14",
+						"addTaskComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_getTaskComments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "securitykey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/tasks/15/getTaskComments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"15",
+						"getTaskComments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_updateTaskComment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"commentId\":\"33\",\n\t\"comment\":\"Updated Comment11\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8200/tasks/14/updateTaskComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"14",
+						"updateTaskComment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TaskAllocation_Task_deleteTaskComment",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "securityKey",
+						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8200/tasks/deleteTaskComment/33",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8200",
+					"path": [
+						"tasks",
+						"deleteTaskComment",
+						"33"
 					]
 				}
 			},

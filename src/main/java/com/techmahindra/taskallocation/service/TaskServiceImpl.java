@@ -42,12 +42,24 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public List<Task> getMyTasks(User user) {
-		return taskRepository.findByAssignedTo(user);
+		return getAllNonCompletedTasks(user);
 	}
 	
 	@Override
 	public List<Task> getAllTasks(User user) {
-		
+		return taskRepository.findByAssignedTo(user);
+	}
+	
+	@Override
+	public List<Task> getAllUsersTasks(User user) {
+		List<User> users = userService.findAllUsersByAdmin(user);
+		users.add(user);
+		TaskStatus taskStatus = taskStatusRepository.findBystatusKey("COMPLETED");
+		return taskRepository.findByAssignedToInAndTaskStatusNot(users,taskStatus);
+	}
+
+	@Override
+	public List<Task> getAllUsersAllTasks(User user) {
 		List<User> users = userService.findAllUsersByAdmin(user);
 		users.add(user);
 		return taskRepository.findByAssignedToIn(users);
