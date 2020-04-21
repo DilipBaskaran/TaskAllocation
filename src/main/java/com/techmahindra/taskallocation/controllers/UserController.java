@@ -44,7 +44,8 @@ public class UserController {
 		userValidator.validate(user, bindingResult,true);
 		User registeringUser =null;
 		if(securityKey==null || securityKey=="") {
-			if(userService.findSuperAdmins().size() ==0) {
+			List<User> superAdmins = userService.findSuperAdmins();
+			if( superAdmins == null || superAdmins.size() == 0 ) {
 				registeringUser = new User();
 				registeringUser.setgID("FirstUser");
 				registeringUser.setIsSuperAdmin(true);

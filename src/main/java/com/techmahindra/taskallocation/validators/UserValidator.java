@@ -52,7 +52,7 @@ public class UserValidator implements Validator{
         if(user.getAdminManager() != null && user.getAdminManager() != "" ) {
         	
         	User admin = userService.findByEmail(user.getAdminManager());
-        	if(!(admin.getIsAdmin() || admin.getIsSuperAdmin()))
+        	if(admin == null || !(admin.getIsAdmin() || admin.getIsSuperAdmin()))
         		errors.rejectValue("adminManager", "Admin Manager is not admin/superadmin");
         }
 
