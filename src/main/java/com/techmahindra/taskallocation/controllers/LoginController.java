@@ -29,7 +29,7 @@ public class LoginController {
 		String password = loginMap.get("password");
 		if(userName == null || password == null)
 			return new OperationResponse("failure","UserName Password combination is not accepted");
-		System.out.println(userName+" "+password);
+		//System.out.println(userName+" "+password);
 		User user = userService.findByUserName(userName);
 		//System.out.println(userName); System.out.println(password);
 		if (user == null  

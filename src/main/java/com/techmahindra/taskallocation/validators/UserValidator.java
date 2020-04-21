@@ -44,10 +44,11 @@ public class UserValidator implements Validator{
         
   
         if(isCreate && userService.findByUserName(user.getgID())!=null)
-        	errors.rejectValue("gID", "UserName is already present");
+        	errors.rejectValue("gID", "gID is already present");
         
         if(isCreate && userService.findByEmail(user.getEmail())!=null)
         	errors.rejectValue("gID", "User Email is already present");
+        
         
         if(user.getAdminManager() != null && user.getAdminManager() != "" ) {
         	

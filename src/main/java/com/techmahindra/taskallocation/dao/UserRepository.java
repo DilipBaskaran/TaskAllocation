@@ -11,19 +11,19 @@ import com.techmahindra.taskallocation.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	User findUserBygID(String gID);
+	User findUserBygIDIgnoreCase(String gID);
 	
 	User findUserBysecurityKey(String securityKey);
 	
-	List<User> findUsersByadminManager(String adminManager);
+	List<User> findUsersByadminManagerIgnoreCase(String adminManager);
 
-	User findUserByemail(String email);
+	User findUserByemailIgnoreCase(String email);
 	
 	List<User> findUsersByisSuperAdmin(boolean isSuperAdmin);
 	
-	List<User> findBynameContaining(String name);
+	List<User> findBynameContainingIgnoreCase(String name);
 	
-	List<User> findBygIDContaining(String gID);
+	List<User> findBygIDContainingIgnoreCase(String gID);
 	
 	@Query("select u from User u where u.adminManager LIKE %:adminEmail% and (u.name LIKE %:name% or u.gID LIKE %:gID%)")
 	List<User> findByAdminAndNameOrGIdContaining(String adminEmail,String name,String gID);

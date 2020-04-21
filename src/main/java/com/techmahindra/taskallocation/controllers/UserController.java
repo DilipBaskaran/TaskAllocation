@@ -87,8 +87,9 @@ public class UserController {
 		userService.saveUser(user);
 
 		//send Mail to User with unique number
-		userService.sendMail(user.getEmail(), "Complete Registration!",
-				"Enter this to change password: "+random+"--->"+user.getEmail());
+		userService.sendMail(user.getEmail(), "Task Allocation - Forgot Password",
+				"Enter this to change password: "+random);
+		
 		return new OperationResponse("success","Unique Number sent to user");
 	}
 

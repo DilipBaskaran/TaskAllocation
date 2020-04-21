@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User findByUserName(String userName) {
-		return userRepository.findUserBygID(userName);
+		return userRepository.findUserBygIDIgnoreCase(userName.toLowerCase());
 	}
 
 
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService{
 		while(!queue.isEmpty()) {
 			User user = queue.remove();
 			//System.out.println("Manager:"+user);
-			List<User> users = userRepository.findUsersByadminManager(user.getEmail());
+			List<User> users = userRepository.findUsersByadminManagerIgnoreCase(user.getEmail());
 			for(User userRec : users) {
 				userList.add(userRec);
 				//System.out.println("user:"+userRec);
@@ -87,13 +87,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 	public List<User> findDirectUsersByAdmin(String adminManager) {
-		List<User> users = userRepository.findUsersByadminManager(adminManager);
+		List<User> users = userRepository.findUsersByadminManagerIgnoreCase(adminManager);
 		return users;
 	}
 
 	@Override
 	public User findByEmail(String email) {
-		return userRepository.findUserByemail(email);
+		return userRepository.findUserByemailIgnoreCase(email.toLowerCase());
 	}
 
 	@Override
@@ -108,12 +108,12 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> findBynameContaining(String name) {
-		return userRepository.findBynameContaining(name);
+		return userRepository.findBynameContainingIgnoreCase(name);
 	}
 
 	@Override
 	public List<User> findBygIDContining(String gID) {
-		return userRepository.findBygIDContaining(gID);
+		return userRepository.findBygIDContainingIgnoreCase(gID);
 	}
 
 	@Override
