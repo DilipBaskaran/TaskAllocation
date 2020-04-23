@@ -40,7 +40,7 @@ public class User {
 	regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
 	private String email;
 		
-	@Email(message = "Email structure should be proper",
+	@Email(message = "adminEmail structure should be proper",
 			regexp = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$")
 	private String adminManager;
 

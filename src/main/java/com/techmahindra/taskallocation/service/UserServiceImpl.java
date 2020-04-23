@@ -120,5 +120,10 @@ public class UserServiceImpl implements UserService{
 	public List<User> findByAdminAndNameOrGIdContaining(String adminEmail, String name, String gID) {
 		return userRepository.findByAdminAndNameOrGIdContaining(adminEmail, name, gID);
 	}
+	@Override
+	public List<User> saveAllUser(List<User> users) {
+		// TODO Auto-generated method stub
+		return userRepository.saveAll(users);
+	}
 
 }

@@ -6,748 +6,817 @@
 	},
 	"item": [
 		{
-			"name": "TaskAllocation_User_Registration",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"name\":\"Candidate User7\",\n\t\"gID\":\"TT00000009\",\n\t\"email\":\"TT00000009@techmahindra.com\",\n\t\"isSuperAdmin\":\"false\",\n\t\"isActive\":\"true\",\n\t\"isAdmin\":\"false\",\n\t\"isCandidate\":\"true\",\n\t\"adminManager\":\"TT00000003@techmahindra.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "UsersAPI",
+			"item": [
+				{
+					"name": "Registration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Candidate User7\",\n\t\"gID\":\"TT00000009\",\n\t\"email\":\"TT00000009@techmahindra.com\",\n\t\"isSuperAdmin\":\"false\",\n\t\"isActive\":\"true\",\n\t\"isAdmin\":\"false\",\n\t\"isCandidate\":\"true\",\n\t\"adminManager\":\"TT00000003@techmahindra.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"registration"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/registration",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"registration"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_Login",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"password\":\"admin123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"password\":\"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"login"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_ForgotPassword",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\":\"TT00000001\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "ForgotPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"TT00000001\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/forgotPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"forgotPassword"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/forgotPassword",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"forgotPassword"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_ConfirmUser",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"uniqueno\":\"4425\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "ConfirmUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"uniqueno\":\"4425\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/confirmuser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"confirmuser"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/confirmuser",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"confirmuser"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_SetPassword",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"password\":\"admin123\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "SetPassword",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\":\"TT00000001\",\n\t\"password\":\"admin123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/setPassword",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"setPassword"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/setPassword",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"setPassword"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_Info",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/user/info",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"info"
-					],
-					"query": [
-						{
-							"key": "securityKey",
-							"value": "VFQwMDAwMDAwMzphYmMxMjM6MjAyMC0wNC0wN1QxNjo0NDozNi42OTU=",
-							"disabled": true
+				{
+					"name": "UserInfo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/user/info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"info"
+							],
+							"query": [
+								{
+									"key": "securityKey",
+									"value": "VFQwMDAwMDAwMzphYmMxMjM6MjAyMC0wNC0wN1QxNjo0NDozNi42OTU=",
+									"disabled": true
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_getSubordinates",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/user/getUsers",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"getUsers"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_UpdateProfile",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"id\": 2,\n\t\"name\": \"Admin_User1\",\n    \"gID\": \"TT00000002\",\n    \"email\": \"TT00000002@techmahindra.com\",\n    \"adminManager\": \"TT00000001@techmahindra.com\",\n    \"isActive\": true,\n    \"isSuperAdmin\": false,\n    \"isAdmin\": true,\n    \"isCandidate\": false\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/updateProfile",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"updateProfile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_addTask",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE1VDE5OjUwOjI0LjQ3Mg==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"title\":\"Task Title 15/04 1956PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-17\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"INPROGRESS\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"1\"\n\t}\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "getSubordinates",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/user/getUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"getUsers"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/tasks/addTask",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"addTask"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getMyTasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getMyTasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getMyTasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_DeleteUserWithID",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/user/deleteUser/4",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"deleteUser",
-						"4"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_getSubordinatesById",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/user/getUsers/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"getUsers",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_GetUserById",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/user/getUser/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"getUser",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Tasks_getAllTaskStatus",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getAllTaskStatus",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getAllTaskStatus"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_SearchUser",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {},
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"condition\":\"Admin\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "UpdateProfile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTA5VDE3OjU0OjMyLjY0OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": 2,\n\t\"name\": \"Admin_User1\",\n    \"gID\": \"TT00000002\",\n    \"email\": \"TT00000002@techmahindra.com\",\n    \"adminManager\": \"TT00000001@techmahindra.com\",\n    \"isActive\": true,\n    \"isSuperAdmin\": false,\n    \"isAdmin\": true,\n    \"isCandidate\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/updateProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"updateProfile"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/user/searchUser",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"user",
-						"searchUser"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_User_Logout",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE1VDE5OjQ2OjAyLjA2NA==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/logout",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_updateTask",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"id\":\"27\",\n\t\"title\":\"Task Title 16/04 1925PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-16\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"COMPLETED\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"2\"\n\t}\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "DeleteUserWithID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/user/deleteUser/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"deleteUser",
+								"4"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/tasks/updateTask",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"updateTask"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getAllPriority",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securitykey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getAllPriority",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getAllPriority"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getAllTasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getAllTasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getAllTasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getAllUsersTasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securitykey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getAllUsersTasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getAllUsersTasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getAllUsersAllTasks",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/getAllUsersAllTasks",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"getAllUsersAllTasks"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_addTaskComment",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "securitykey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"comment\":\"Test Comment for the task11\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "getSubordinatesById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/user/getUsers/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"getUsers",
+								"2"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/tasks/14/addTaskComment",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"14",
-						"addTaskComment"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_getTaskComments",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "securitykey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/15/getTaskComments",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"15",
-						"getTaskComments"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "TaskAllocation_Task_updateTaskComment",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"commentId\":\"33\",\n\t\"comment\":\"Updated Comment11\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "GetUserById",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/user/getUser/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"getUser",
+								"2"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8200/tasks/14/updateTaskComment",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"14",
-						"updateTaskComment"
-					]
+				{
+					"name": "SearchUser",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {},
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"condition\":\"Admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/searchUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"searchUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE1VDE5OjQ2OjAyLjA2NA==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UploadUsers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAxMDphYmMxMjM6MjAyMC0wNC0yMlQxODowMDoyNi44NTk=",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "usersFile",
+									"type": "file",
+									"src": "/C:/Users/admin/Downloads/UserList.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8200/user/uploadUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"uploadUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "downloadUsersSavedData",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8200/user/download/UserSaved-UnSaved_1587635999408.csv",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"user",
+								"download",
+								"UserSaved-UnSaved_1587635999408.csv"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "TaskAllocation_Task_deleteTaskComment",
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "securityKey",
-						"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8200/tasks/deleteTaskComment/33",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8200",
-					"path": [
-						"tasks",
-						"deleteTaskComment",
-						"33"
-					]
+			"name": "TasksAPI",
+			"item": [
+				{
+					"name": "addTask",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE1VDE5OjUwOjI0LjQ3Mg==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"Task Title 15/04 1956PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-17\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"INPROGRESS\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"1\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/tasks/addTask",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"addTask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMyTasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getMyTasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getMyTasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTask",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\":\"27\",\n\t\"title\":\"Task Title 16/04 1925PM\",\n\t\"description\":\"task description\",\n\t\"dueDate\":\"2020-04-16\",\n\t\"taskStatus\":{\n\t\t\"statusKey\":\"COMPLETED\"\n\t},\n\t\"priority\":{\n\t\t\"id\":\"11\"\n\t},\n\t\"assignedTo\":{\n\t\t\"id\":\"2\"\n\t}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/tasks/updateTask",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"updateTask"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllTaskStatus",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getAllTaskStatus",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getAllTaskStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllPriority",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securitykey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getAllPriority",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getAllPriority"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllTasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getAllTasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getAllTasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsersTasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securitykey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getAllUsersTasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getAllUsersTasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllUsersAllTasks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/getAllUsersAllTasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"getAllUsersAllTasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AddTaskComment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "securitykey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"comment\":\"Test Comment for the task11\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/tasks/14/addTaskComment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"14",
+								"addTaskComment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetTaskComments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "securitykey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/15/getTaskComments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"15",
+								"getTaskComments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTaskComment",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"commentId\":\"33\",\n\t\"comment\":\"Updated Comment11\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8200/tasks/14/updateTaskComment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"14",
+								"updateTaskComment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteTaskComment",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "securityKey",
+								"value": "VFQwMDAwMDAwMTphZG1pbjEyMzoyMDIwLTA0LTE2VDE4OjQ1OjE2Ljc2OQ==",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8200/tasks/deleteTaskComment/33",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8200",
+							"path": [
+								"tasks",
+								"deleteTaskComment",
+								"33"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}

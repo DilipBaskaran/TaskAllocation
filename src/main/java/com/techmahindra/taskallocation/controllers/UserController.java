@@ -1,12 +1,29 @@
 package com.techmahindra.taskallocation.controllers;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +32,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.techmahindra.taskallocation.exceptions.ResourceNotFoundException;
 import com.techmahindra.taskallocation.models.User;
 import com.techmahindra.taskallocation.responses.OperationResponse;
 import com.techmahindra.taskallocation.service.UserService;
@@ -26,12 +46,17 @@ import com.techmahindra.taskallocation.validators.UserValidator;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
+	private final String headerCSV = "GID,Name,Email,MobileNo,AdminManager,isActive,isSuperAdmin,isAdmin,isCandidate";  
 
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private UserValidator userValidator;
+
+	@Value("${fileupload.folder}")
+	private String UPLOADED_FOLDER;
 
 	@ResponseBody
 	@PostMapping("/registration")
@@ -76,7 +101,7 @@ public class UserController {
 		String userName = loginMap.get("username");
 		if(userName==null)
 			return new OperationResponse("failure","Data not correct! User information given are wrong!");
-		
+
 		User user = userService.findByUserName(userName);
 		if(user == null)
 			return new OperationResponse("failure","Data not correct! User information given are wrong!");
@@ -89,7 +114,7 @@ public class UserController {
 		//send Mail to User with unique number
 		userService.sendMail(user.getEmail(), "Task Allocation - Forgot Password",
 				"Enter this to change password: "+random);
-		
+
 		return new OperationResponse("success","Unique Number sent to user");
 	}
 
@@ -100,7 +125,7 @@ public class UserController {
 		String uniqueno = loginMap.get("uniqueno");		
 		if(userName == null || uniqueno == null)
 			return new OperationResponse("failure","Data not correct! UserName & Unique Number combination is wrong!");
-		
+
 		User user = userService.findByUserName(userName);
 		if(user==null || !uniqueno.equalsIgnoreCase(user.getRandomNo())) 
 			return new OperationResponse("failure","Data not correct! UserName & Unique Number combination is wrong!");
@@ -111,7 +136,7 @@ public class UserController {
 	@ResponseBody
 	@PostMapping("/setPassword")
 	public OperationResponse setPassword(@RequestBody HashMap<String,String> loginMap) {
-		
+
 		String userName = loginMap.get("username");
 		String password = loginMap.get("password");
 		if(password == null || userName==null)
@@ -151,7 +176,7 @@ public class UserController {
 		String condition = conditionMap.get("condition");
 		if(condition == null)
 			return new OperationResponse("failure","Data not correct!","condition param is not available");
-		
+
 		User adminUser = userService.findUserBySecurityKey(securityKey);
 		if(adminUser==null)			
 			return new OperationResponse("failure","Data not correct! Not a valid User!!");
@@ -221,7 +246,7 @@ public class UserController {
 				"User Update Done",
 				userToUpdate);
 	}
-	
+
 	@ResponseBody
 	@GetMapping("/getUser/{id}")
 	public Object getUser(@RequestHeader(value="securityKey") String securityKey,
@@ -258,7 +283,7 @@ public class UserController {
 				userList);
 	}
 
-	
+
 
 
 
@@ -288,7 +313,7 @@ public class UserController {
 		System.out.println(id);
 		if(superAdminUser==null || !superAdminUser.getIsSuperAdmin())
 			return new OperationResponse("failure","User Key not correct! User is not valid to delete!!");
-		
+
 		User userToDelete = userService.findById(id);
 		System.out.println(userToDelete);
 		if(userToDelete!=null && (userToDelete.getIsAdmin() || userToDelete.getIsSuperAdmin())) {
@@ -303,4 +328,132 @@ public class UserController {
 		return new OperationResponse("success","User with id "+id+ " is deleted");
 	}
 
+	@ResponseBody
+	@PostMapping("/uploadUsers")
+	public OperationResponse uploadUsersExcel(
+			@RequestParam("usersFile") MultipartFile usersFile,
+			@RequestHeader("securityKey") String securityKey
+			) throws IOException {
+		User superAdminUser = userService.findUserBySecurityKey(securityKey);
+
+		if(superAdminUser==null )
+			return new OperationResponse("failure","User Key not correct! User is not valid to upload!!");
+
+		String uploadedFileName = usersFile.getOriginalFilename();
+		if (StringUtils.isEmpty(uploadedFileName) || 
+				!(uploadedFileName.endsWith("xls")
+						|| uploadedFileName.endsWith("xlsx") 
+						|| uploadedFileName.endsWith("csv"))) 
+			return new OperationResponse("failure","File is not valid",
+					"File should be in the CSV Format");
+
+		Path savedFile = saveUploadedFile(usersFile);
+		List<User> userList = new LinkedList<User>();
+		List<String> savedUserList = new LinkedList<String>();
+		List<String> unSavedUserList = new LinkedList<String>();
+		String userSavedvsUnSaved="";
+		try (Stream<String> stream = Files.lines(savedFile)){
+			stream.forEach(str->{
+				String[] user = str.split(",");
+				if(!user[0].equals("GID")) {
+					User userObj = new User(user[1].trim(),
+							user[0].trim(),
+							user[2].trim(),
+							user[4].trim().equals("")?null:user[4].trim(),
+							user[5].trim().equalsIgnoreCase("YES"),
+							user[6].trim().equalsIgnoreCase("YES"),
+							user[7].trim().equalsIgnoreCase("YES"),
+							user[8].trim().equalsIgnoreCase("YES"));
+					
+					userObj.setPassword(EncodingUtil.encode("abc123"));
+					userObj.setCreatedBy(superAdminUser.getgID());
+					userObj.setUpdatedBy(superAdminUser.getgID());
+					
+					userList.add(userObj);
+					try {
+						userService.saveUser(userObj);
+						savedUserList.add(str);
+					}catch(Exception ex) {
+						unSavedUserList.add(str);
+					}
+				}
+			});
+		}
+		if(unSavedUserList.size()!=0) {
+			userSavedvsUnSaved+="UnSaved User List";
+			userSavedvsUnSaved+="\n"+headerCSV;
+			for(String str : unSavedUserList)
+				userSavedvsUnSaved+="\n"+str;	
+		}
+		if(savedUserList.size()!=0) {
+			userSavedvsUnSaved+="\nSaved User List";
+			userSavedvsUnSaved+="\n"+headerCSV;
+			for(String str : savedUserList) 
+				userSavedvsUnSaved+="\n"+str;
+		}
+		
+		String fileToSave="UserSaved-UnSaved_"+System.currentTimeMillis()+".csv";
+		
+		try(FileWriter fileWriter = new FileWriter(UPLOADED_FOLDER+fileToSave)) {
+			fileWriter.write(userSavedvsUnSaved);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			return new OperationResponse("failure","File is not valid",
+					"Re-upload with proper value");
+		}
+		
+		return new OperationResponse("success","File Uploaded","/user/download/"+fileToSave);
+	}
+	
+	@ResponseBody
+	@GetMapping("/download/{downloadFile}")
+	public ResponseEntity<Resource> downloadFile(
+			//@RequestHeader("securitykey") String securityKey,
+			@PathVariable("downloadFile") String downloadFile, HttpServletRequest request) throws MalformedURLException{
+		/*
+		 * User superAdminUser = userService.findUserBySecurityKey(securityKey);
+		 * 
+		 * if(superAdminUser==null ) throw new ResourceNotFoundException("User",
+		 * "securityKey", "MentionedValue");
+		 */
+		
+		Path filePath=  Paths.get(UPLOADED_FOLDER).toAbsolutePath().normalize();
+		
+		filePath = filePath.resolve(downloadFile).normalize();
+		Resource resource = new UrlResource(filePath.toUri());
+        if(!resource.exists()) 
+			throw new ResourceNotFoundException("DownloadFIle", "FileName", downloadFile);
+		
+		
+		String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            //logger.info("Could not determine file type.");
+        }
+
+        // Fallback to the default content type if type could not be determined
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+        
+        System.out.println("Resource Generated...");
+        
+        
+        
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+	}
+	
+
+	private Path saveUploadedFile(MultipartFile file) throws IOException{
+		byte[] bytes = file.getBytes();
+		String name = file.getOriginalFilename();
+		Path path = Paths.get(UPLOADED_FOLDER + name);
+		Files.write(path, bytes);
+		return path;
+
+	}
 }
