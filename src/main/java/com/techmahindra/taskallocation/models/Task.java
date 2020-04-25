@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.FutureOrPresent;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,7 +34,15 @@ public class Task {
 	private TaskStatus taskStatus;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
+	private TaskType taskType;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Priority priority;
+	
+	
+	private Integer timeSheetDays;
+	
+	private Integer eLearningCompleted;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "task",fetch = FetchType.EAGER)
@@ -199,6 +206,14 @@ public class Task {
 	public void setTaskStatus(TaskStatus taskStatus) {
 		this.taskStatus = taskStatus;
 	}
+	
+	public TaskType getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(TaskType taskType) {
+		this.taskType = taskType;
+	}
 
 	public List<TaskComments> getTaskComments() {
 		return taskComments;
@@ -216,8 +231,23 @@ public class Task {
 		taskComments.add(taskComment);
 		
 	}
-	
-	
 
+	public Integer getTimeSheetDays() {
+		return timeSheetDays;
+	}
+
+	public void setTimeSheetDays(Integer timeSheetDays) {
+		this.timeSheetDays = timeSheetDays;
+	}
+
+	public Integer getELearningCompleted() {
+		return eLearningCompleted;
+	}
+
+	public void setELearningCompleted(Integer eLearningCompleted) {
+		this.eLearningCompleted = eLearningCompleted;
+	}
+
+	
 	
 }

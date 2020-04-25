@@ -1,6 +1,7 @@
 package com.techmahindra.taskallocation.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ public class TaskCommentsServiceImpl implements TaskCommentsService {
 	
 	@Override
 	public TaskComments findById(Long id) {
-		return taskCommentsRepository.findById(id).get();
+		Optional<TaskComments> optionalTaskComment = taskCommentsRepository.findById(id);
+		return optionalTaskComment.isPresent()?optionalTaskComment.get():null;
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.techmahindra.taskallocation.responses.OperationResponse;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class ExceptionAdvice {
 	
 	

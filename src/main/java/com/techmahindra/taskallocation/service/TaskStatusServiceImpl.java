@@ -1,6 +1,7 @@
 package com.techmahindra.taskallocation.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class TaskStatusServiceImpl implements TaskStatusService {
 
 	@Override
 	public TaskStatus findById(Long id) {
-		// TODO Auto-generated method stub
-		return taskStatusRepository.findById(id).get();
+		Optional<TaskStatus> optionalStatus = taskStatusRepository.findById(id);
+		return optionalStatus.isPresent()?optionalStatus.get():null;
 	}
 
 }

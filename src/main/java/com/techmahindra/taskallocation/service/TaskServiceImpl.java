@@ -1,6 +1,8 @@
 package com.techmahindra.taskallocation.service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.techmahindra.taskallocation.dao.TaskRepository;
 import com.techmahindra.taskallocation.dao.TaskStatusRepository;
 import com.techmahindra.taskallocation.dao.UserRepository;
-import com.techmahindra.taskallocation.exceptions.ResourceNotFoundException;
 import com.techmahindra.taskallocation.models.Task;
 import com.techmahindra.taskallocation.models.TaskStatus;
 import com.techmahindra.taskallocation.models.User;
@@ -31,7 +32,8 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public Task findById(Long id) {
-		return taskRepository.findById(id).get();
+		Optional<Task> optionalTask = taskRepository.findById(id);
+		return optionalTask.isPresent()?optionalTask.get():null;
 	}
 	
 	@Override
@@ -42,6 +44,8 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public List<Task> getMyTasks(User user) {
+		System.out.println(LocalDate.now().toString());
+		System.out.println(taskRepository.getCurrentMonthReport(LocalDate.now()));
 		return getAllNonCompletedTasks(user);
 	}
 	

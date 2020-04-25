@@ -39,6 +39,14 @@ public class TaskValidator implements Validator{
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "status", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dueDate", "NotEmpty");
         
+        if(task.getTaskStatus() == null)
+        	errors.rejectValue("id", "TaskStatus should not be Empty");
+        
+        if(task.getTaskType() == null)
+        	errors.rejectValue("id", "TaskType should not be Empty");
+        
+        if(task.getPriority() == null)
+        	errors.rejectValue("id", "Priority should not be Empty");
         
     }
 }

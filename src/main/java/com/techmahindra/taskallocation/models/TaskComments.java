@@ -2,7 +2,6 @@ package com.techmahindra.taskallocation.models;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -27,7 +26,7 @@ public class TaskComments {
 	
 	@JsonIgnore
 	@ManyToOne(fetch=FetchType.EAGER)
-	Task task;
+	private Task task;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private User commentedBy;

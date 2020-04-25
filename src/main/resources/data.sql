@@ -13,3 +13,8 @@ insert into taskallocationdb.task_status(id,status_key,status_value,sort_order) 
 insert into taskallocationdb.task_status(id,status_key,status_value,sort_order) values(17,'COMPLETED','Completed',3);
 /*insert into priority(status_key,status_value,sort_order) values('OPEN','Open',1);
 insert into priority(status_key,status_value,sort_order) values('OPEN','Open',1);*/
+
+/*TASKSTATUS TABLE DEFAULT ENTRIES*/
+insert into taskallocationdb.task_type(id,type_key,type_value,sort_order) values(18,'TIMESHEET','TimeSheet',1);
+insert into taskallocationdb.task_type(id,type_key,type_value,sort_order) values(19,'ELEARNING','E-Learning',2);
+insert into taskallocationdb.task_type(id,type_key,type_value,sort_order) values(20,'GENERAL','General',3);

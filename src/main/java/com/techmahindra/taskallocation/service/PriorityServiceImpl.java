@@ -1,6 +1,7 @@
 package com.techmahindra.taskallocation.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ public class PriorityServiceImpl implements PriorityService {
 	
 	@Override
 	public Priority findById(Long id) {
-		return priorityRepository.findById(id).get();
+		Optional<Priority> optionalPriority = priorityRepository.findById(id);
+		return optionalPriority.isPresent()?optionalPriority.get():null;
 	}
 
 	@Override
