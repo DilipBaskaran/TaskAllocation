@@ -44,8 +44,6 @@ public class TaskServiceImpl implements TaskService {
 	
 	@Override
 	public List<Task> getMyTasks(User user) {
-		System.out.println(LocalDate.now().toString());
-		System.out.println(taskRepository.getCurrentMonthReport(LocalDate.now()));
 		return getAllNonCompletedTasks(user);
 	}
 	
@@ -78,6 +76,12 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public List<Task> getAllTasksWithStatus(User user,TaskStatus taskStatus){
 		return taskRepository.findByAssignedToAndTaskStatus(user, taskStatus);
+	}
+
+	@Override
+	public List<String> getCurrentMonthReport() {
+		//System.out.println(LocalDate.now().toString());
+		return taskRepository.getCurrentMonthReport(LocalDate.now());
 	}
 
 	

@@ -429,18 +429,12 @@ public class UserController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            //logger.info("Could not determine file type.");
         }
 
-        // Fallback to the default content type if type could not be determined
         if(contentType == null) {
             contentType = "application/octet-stream";
         }
-        
-        System.out.println("Resource Generated...");
-        
-        
-        
+
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")

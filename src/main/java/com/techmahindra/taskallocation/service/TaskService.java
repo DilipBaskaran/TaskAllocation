@@ -16,5 +16,6 @@ public interface TaskService {
 	public List<Task> getAllUsersAllTasks(User user);
 	public List<Task> getAllNonCompletedTasks(User user);
 	public List<Task> getAllTasksWithStatus(User user,TaskStatus taskStatus);
+	public List<String> getCurrentMonthReport();
 	
 }
