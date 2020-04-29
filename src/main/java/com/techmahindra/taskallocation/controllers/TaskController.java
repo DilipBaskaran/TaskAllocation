@@ -274,9 +274,13 @@ public class TaskController {
 			return new OperationResponse("failure","Priority Data is not valid!!","id/statusKey is not valid!!");
 
 
-		if( task.getAssignedTo() == null || task.getAssignedTo().getId()==null) 
-			task.setAssignedTo(keyUser);
-		else {
+		if( task.getAssignedTo() == null || task.getAssignedTo().getId()==null) {
+			User adminUser = userService.findByEmail(keyUser.getAdminManager());
+			if(adminUser == null)
+				task.setAssignedTo(keyUser);
+			else
+				task.setAssignedTo(adminUser);
+		}else {
 			User user = task.getAssignedTo();
 			user = userService.findById(user.getId());
 			if(user == null)
